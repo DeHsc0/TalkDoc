@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "dist/app.js",
   "scripts": {
     "build": "tsc",
@@ -12,8 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@clerk/express": "^1.7.65",
+    "@repo/database": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "express": "^5.2.1"
+    "drizzle-orm": "^0.45.1",
+    "express": "^5.2.1",
+    "svix": "^1.84.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

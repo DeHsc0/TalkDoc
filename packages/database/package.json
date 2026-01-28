@@ -2,9 +2,13 @@
   "name": "@repo/database",
   "version": "0.0.0",
   "description": "",
-  "main": "index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./schema": "./src/schema.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate" : "drizzle-kit generate",
+    "build" : "tsc"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +16,7 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^22.15.3",
+    "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.8",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"

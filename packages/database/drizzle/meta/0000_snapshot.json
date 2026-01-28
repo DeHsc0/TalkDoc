@@ -1,0 +1,139 @@
+{
+  "id": "1cb41a28-7491-411c-a55a-23ed15112dba",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.docs": {
+      "name": "docs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "usersClerkId": {
+          "name": "usersClerkId",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "docName": {
+          "name": "docName",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "docs_usersClerkId_users_clerkId_fk": {
+          "name": "docs_usersClerkId_users_clerkId_fk",
+          "tableFrom": "docs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "usersClerkId"
+          ],
+          "columnsTo": [
+            "clerkId"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "docs_docName_unique": {
+          "name": "docs_docName_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "docName"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "clerkId": {
+          "name": "clerkId",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_clerkId_unique": {
+          "name": "users_clerkId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "clerkId"
+          ]
+        },
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
