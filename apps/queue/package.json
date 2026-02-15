@@ -1,0 +1,25 @@
+{
+  "name": "@repo/queue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": " pnpm run build && node dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/ioredis": "^5.0.0",
+    "@types/node": "^22.15.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@repo/database": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "bullmq": "^5.69.2",
+    "ioredis": "^5.9.3"
+  }
+}

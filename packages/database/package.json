@@ -8,6 +8,7 @@
   },
   "scripts": {
     "generate" : "drizzle-kit generate",
+    "migrate" : "drizzle-kit migrate",
     "build" : "tsc"
   },
   "keywords": [],
