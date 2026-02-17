@@ -7,6 +7,7 @@
     "build": "tsc -b",
     "dev": " pnpm run build && node dist"
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -20,6 +21,6 @@
     "@repo/database": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "bullmq": "^5.69.2",
-    "ioredis": "^5.9.3"
+    "ioredis": "5.9.2"
   }
 }

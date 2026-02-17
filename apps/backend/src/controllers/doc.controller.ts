@@ -1,9 +1,11 @@
 import { fileQueue }  from "@repo/queue"
+import { Request, Response } from "express";
 
-function createDoc () {
+function createDoc ( req : Request , res : Response) {
 
-    fileQueue.add
+    const file = req.body
 
+    fileQueue.add("file" , file)
 
 }
 

@@ -1,6 +1,6 @@
 import { Router } from "express"
-import { uploads } from "../app"
 import { createDoc } from "../controllers/doc.controller"
+import { uploads } from "../middlewares/uploads"
 
 const docRouter : Router = Router()
 
