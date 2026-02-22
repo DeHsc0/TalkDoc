@@ -1,12 +1,32 @@
 import { fileQueue }  from "@repo/queue"
 import { Request, Response } from "express";
+import { docCreation } from "../types/zod";
 
-function createDoc ( req : Request , res : Response) {
+async function createDoc ( req : Request , res : Response) {
 
-    const file = req.body
+    const parseData = docCreation.safeParse({
 
-    fileQueue.add("file" , file)
+        name : req.body.name,
+        document : req.file
+        
+    })
+
+
+
+    if(!parseData.success) return res.status(400).json({
+
+        message : "Invalid input",
+        errors : parseData.error.flatten()
+    })
+
+    
+    
+    const data = await fileQueue.add("file", parseData.data.document)
+
+    res.status(200).json({
+        message : "Doc created Successfully"
+    })
 
 }
 
-export { createDoc }
+export { createDoc }    

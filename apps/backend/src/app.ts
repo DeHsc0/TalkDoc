@@ -1,7 +1,6 @@
 import express from "express"
 import apiRouter from "./routers"
 import { clerkMiddleware } from "@clerk/express"
-import multer from "multer"
 
 const app = express()
 

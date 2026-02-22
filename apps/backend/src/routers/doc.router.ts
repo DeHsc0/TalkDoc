@@ -4,6 +4,6 @@ import { uploads } from "../middlewares/uploads"
 
 const docRouter : Router = Router()
 
-docRouter.post("/" , uploads.single("file") , createDoc )
+docRouter.post("/" , uploads.single("document") , createDoc )
 
 export default docRouter
