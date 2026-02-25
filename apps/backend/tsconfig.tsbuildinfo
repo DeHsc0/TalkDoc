@@ -1,1 +1,1 @@
-{"root":["./src/app.ts","./src/controllers/webhook.controllers.ts","./src/routers/index.ts","./src/routers/webhook.routes.ts"],"version":"5.9.3"}
+{"root":["./src/app.ts","./src/controllers/doc.controller.ts","./src/controllers/webhook.controllers.ts","./src/middlewares/uploads.ts","./src/routers/doc.router.ts","./src/routers/index.ts","./src/routers/webhook.routes.ts","./src/types/zod.ts"],"errors":true,"version":"5.9.3"}

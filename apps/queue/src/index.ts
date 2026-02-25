@@ -1,11 +1,8 @@
 
 import { Queue } from "bullmq"
-import { Redis} from "ioredis"
 import { FileJobData } from "./types/types"
+import { connection } from "./config.js"
 
-const connection = new Redis( process.env.REDIS_URL, {
-        maxRetriesPerRequest : null
-    } 
-)
+const fileQueue = new Queue<FileJobData>( "file-processing" , { connection })
 
-export const fileQueue = new Queue<FileJobData>( "file-processing" , { connection })
+export { fileQueue }

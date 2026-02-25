@@ -28,9 +28,12 @@ async function createDoc ( req : Request , res : Response) {
         
     })
 
+    const log = await   
+
     res.status(200).json({
         message : "Doc created Successfully",
-        f : req.file && path.resolve(req.file.path)
+        f : req.file && path.resolve(req.file.path),
+        data
     })
 
 }

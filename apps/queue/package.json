@@ -4,6 +4,8 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "dev:worker": "tsx watch src/worker/index.ts",
+    "start:worker": "node dist/worker/index.js",
     "build": "tsc -b",
     "dev": " pnpm run build && node dist"
   },
@@ -14,13 +16,18 @@
   "devDependencies": {
     "@types/ioredis": "^5.0.0",
     "@types/node": "^22.15.3",
+    "@types/pdf-parse": "^1.1.5",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@langchain/community": "^1.1.19",
+    "@langchain/core": "^1.1.28",
     "@repo/database": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "bullmq": "^5.69.2",
-    "ioredis": "5.9.2"
+    "ioredis": "5.9.2",
+    "pdf-parse": "^2.4.5",
+    "pdfjs-dist": "^2.16.105"
   }
 }
