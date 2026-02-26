@@ -75,6 +75,12 @@ importers:
       '@langchain/core':
         specifier: ^1.1.28
         version: 1.1.28(openai@6.25.0(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
+      '@langchain/google-genai':
+        specifier: ^2.1.20
+        version: 2.1.20(@langchain/core@1.1.28(openai@6.25.0(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))
+      '@langchain/textsplitters':
+        specifier: ^1.0.1
+        version: 1.0.1(@langchain/core@1.1.28(openai@6.25.0(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))
       '@repo/database':
         specifier: workspace:*
         version: link:../../packages/database
@@ -750,6 +756,10 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@google/generative-ai@0.24.1':
+    resolution: {integrity: sha512-MqO+MLfM6kjxcKoy0p1wRzG3b4ZZXtPI+z2IE26UogS2Cm/XHO+7gGRBh6gcJsOiIVoH93UwKvW4HdgiOZCy9Q==}
+    engines: {node: '>=18.0.0'}
+
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -1167,6 +1177,12 @@ packages:
   '@langchain/core@1.1.28':
     resolution: {integrity: sha512-6FAGdezEp8zHY92LtnsAiv54KaG41nBdsuukk+R+1484edV20cVOyIc36ANuGKPx0pmYFCBWhCUdO0jxB/zn2Q==}
     engines: {node: '>=20'}
+
+  '@langchain/google-genai@2.1.20':
+    resolution: {integrity: sha512-x4zS3iv6x27M38izV/einJM9qXAGvVAYt2fUW8hiQnh9AX0vYVJBkoqGpxsvHNejqGYlTXOollPUp3XuVjlHjQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@langchain/core': ^1.1.27
 
   '@langchain/openai@1.2.10':
     resolution: {integrity: sha512-1O/kz5eC76BLq24ij3PTHBAo/P5lE5etA6mcKu6goKo5KfeXw8c1ae9TGbjiBahIM7Gh7bAlrh7ITHnedqsJ3g==}
@@ -3817,6 +3833,8 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
+  '@google/generative-ai@0.24.1': {}
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.7':
@@ -3918,6 +3936,12 @@ snapshots:
       - '@opentelemetry/exporter-trace-otlp-proto'
       - '@opentelemetry/sdk-trace-base'
       - openai
+
+  '@langchain/google-genai@2.1.20(@langchain/core@1.1.28(openai@6.25.0(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))':
+    dependencies:
+      '@google/generative-ai': 0.24.1
+      '@langchain/core': 1.1.28(openai@6.25.0(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
+      uuid: 11.1.0
 
   '@langchain/openai@1.2.10(@langchain/core@1.1.28(openai@6.25.0(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(ws@8.18.3(bufferutil@4.1.0))':
     dependencies:

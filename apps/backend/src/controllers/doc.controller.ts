@@ -1,4 +1,4 @@
-import { fileQueue }  from "@repo/queue"
+import { fileQueue, queueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
 import { docCreation } from "../types/zod";
 import path from "path";
@@ -28,12 +28,13 @@ async function createDoc ( req : Request , res : Response) {
         
     })
 
-    const log = await   
+    const job : { success : boolean , error ?: string } | any = await data.waitUntilFinished(queueEvents)  
 
     res.status(200).json({
         message : "Doc created Successfully",
         f : req.file && path.resolve(req.file.path),
-        data
+        data, 
+        job
     })
 
 }
