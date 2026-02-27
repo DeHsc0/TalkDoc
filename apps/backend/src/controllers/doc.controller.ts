@@ -2,6 +2,7 @@ import { fileQueue, queueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
 import { docCreation } from "../types/zod";
 import path from "path";
+import { randomUUID } from "crypto";
 
 async function createDoc ( req : Request , res : Response) {
 
@@ -26,7 +27,7 @@ async function createDoc ( req : Request , res : Response) {
         originalName : req.file.originalname,
         userId : "uuid_123"                           
         
-    })
+    } , { jobId : randomUUID().toString() })
 
     const job : { success : boolean , error ?: string } | any = await data.waitUntilFinished(queueEvents)  
 

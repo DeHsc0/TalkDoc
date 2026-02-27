@@ -24,6 +24,7 @@
     "@langchain/community": "^1.1.19",
     "@langchain/core": "^1.1.28",
     "@langchain/google-genai": "^2.1.20",
+    "@langchain/qdrant": "^1.0.1",
     "@langchain/textsplitters": "^1.0.1",
     "@repo/database": "workspace:*",
     "@repo/typescript-config": "workspace:*",
