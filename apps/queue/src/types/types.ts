@@ -2,6 +2,7 @@ export type FileJobData =  {
 
     filePath : string,
     originalName : string,
-    userId : string
+    userId : string,
+    description : string | undefined
     
 }

@@ -5,5 +5,6 @@ import { uploads } from "../middlewares/uploads"
 const docRouter : Router = Router()
 
 docRouter.post("/" , uploads.single("document") , createDoc )
+docRouter.post("/search" , )
 
 export default docRouter

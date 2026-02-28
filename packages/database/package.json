@@ -7,9 +7,10 @@
     "./schema": "./src/schema.js"
   },
   "scripts": {
-    "generate" : "drizzle-kit generate",
-    "migrate" : "drizzle-kit migrate",
-    "build" : "tsc"
+    "db:generate" : "drizzle-kit generate",
+    "db:migrate" : "drizzle-kit migrate",
+    "build" : "tsc",
+    "db:push" : "drizzle-kit push"
   },
   "keywords": [],
   "author": "",

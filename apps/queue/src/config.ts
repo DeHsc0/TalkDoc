@@ -1,14 +1,9 @@
+import "dotenv/config"
 import Redis from "ioredis";
-import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 
-const connection = new Redis( process.env.REDIS_URL, {
+const connection = new Redis( process.env.REDIS_URL || "", {
         maxRetriesPerRequest : null
     } 
 )
 
-const embeddings = new GoogleGenerativeAIEmbeddings({
-  model: "gemini-embedding-001",
-  apiKey : process.env.GEMINI_API_KEY,
-})
-
-export { connection , embeddings }
+export { connection }

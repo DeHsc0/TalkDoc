@@ -10,14 +10,24 @@ const fileSchema = z.object({
     buffer : z.instanceof(Buffer).optional(),
     size : z.number().positive().max(10 * 1024 * 1024),
     path: z.string().optional()
+
 })
 
 const docCreation = z.object({
 
     name : z.string().max(200).optional(),
-    document : fileSchema
+    document : fileSchema,
+    description : z.string().optional()
     
 })
 
+const searchDoc = z.object({
 
-export { docCreation }
+    docId : z.string().max(200),
+    searchQuery : z.string().max(600),
+    userId : z.string()    
+
+})
+
+
+export { docCreation , searchDoc }

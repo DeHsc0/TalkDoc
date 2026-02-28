@@ -9,7 +9,8 @@ async function createDoc ( req : Request , res : Response) {
     const parseData = docCreation.safeParse({
 
         name : req.body.name,
-        document : req.file
+        document : req.file,
+        description : req.body.description
         
     })
 
@@ -24,8 +25,9 @@ async function createDoc ( req : Request , res : Response) {
     const data = await fileQueue.add("file", {
 
         filePath : path.resolve(req.file.path),
-        originalName : req.file.originalname,
-        userId : "uuid_123"                           
+        originalName : parseData.data.document.originalname,
+        userId : "62543b6c-aeee-4a71-9804-fc44cd010803",  // replace
+        description : parseData.data.description                  
         
     } , { jobId : randomUUID().toString() })
 
@@ -37,6 +39,12 @@ async function createDoc ( req : Request , res : Response) {
         data, 
         job
     })
+
+}
+
+async function searchDoc ( req : Request , res : Response ) {
+
+    
 
 }
 
