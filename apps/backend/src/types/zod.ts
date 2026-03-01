@@ -13,7 +13,7 @@ const fileSchema = z.object({
 
 })
 
-const docCreation = z.object({
+const docCreationSchema = z.object({
 
     name : z.string().max(200).optional(),
     document : fileSchema,
@@ -21,7 +21,7 @@ const docCreation = z.object({
     
 })
 
-const searchDoc = z.object({
+const chatSchema = z.object({
 
     docId : z.string().max(200),
     searchQuery : z.string().max(600),
@@ -30,4 +30,4 @@ const searchDoc = z.object({
 })
 
 
-export { docCreation , searchDoc }
+export { docCreationSchema , chatSchema }

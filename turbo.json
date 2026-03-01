@@ -23,16 +23,13 @@
       "persistent": true
     },
     "db:generate": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
     "db:migrate": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
     "db:push": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     }
   }
 }

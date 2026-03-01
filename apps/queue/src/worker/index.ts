@@ -29,22 +29,20 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
             metadata: { ...doc.metadata, docId : job.id }
         }))
         
-        const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings , {
-            collectionName: "docs",
-            client : qdrantClient
-        })
         
-        const vecData = await vectorStore.addDocuments(docsWithMeta)
-
         const response = await db.insert(docs).values({
 
             usersClerkId : job.data.userId,
             docName : job.data.originalName,
             description : job.data.description 
-
+            
         })
 
-
+        const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings , {
+            collectionName: "docs",
+            client : qdrantClient
+        })
+        const vecData = await vectorStore.addDocuments(docsWithMeta)
 
         return { success : true }
 
@@ -66,4 +64,4 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
 }, { connection })
 
 worker.on("completed", () => console.log("task done"))
-worker.on("failed" , () => console.error("it failed"))
+worker.on("failed" , (job , err) => console.error(`Job ${job && job.id} failed:${err}`) )

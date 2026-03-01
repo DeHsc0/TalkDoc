@@ -1,12 +1,12 @@
 import { fileQueue, queueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
-import { docCreation } from "../types/zod";
+import { docCreationSchema } from "../types/zod";
 import path from "path";
 import { randomUUID } from "crypto";
 
 async function createDoc ( req : Request , res : Response) {
 
-    const parseData = docCreation.safeParse({
+    const parseData = docCreationSchema.safeParse({
 
         name : req.body.name,
         document : req.file,
@@ -42,10 +42,10 @@ async function createDoc ( req : Request , res : Response) {
 
 }
 
-async function searchDoc ( req : Request , res : Response ) {
+async function chatDoc ( req : Request , res : Response ) {
 
     
 
 }
 
-export { createDoc }    
+export { createDoc , chatDoc }    

@@ -1,10 +1,17 @@
 {
-  "name": "config",
+  "name": "@repo/config",
   "version": "0.0.0",
   "main": "config.js",
   "type": "module",
   "scripts": {
-    "build" : "tsc -b"
+    "build" : "tsc -b",
+    "dev" : "pnpm run build && node dist/config.js"
+  },
+  "exports" : {
+    ".": {
+      "types": "./dist/config.d.ts",
+      "import": "./dist/config.js"
+    }
   },
   "keywords": [],
   "author": "",
