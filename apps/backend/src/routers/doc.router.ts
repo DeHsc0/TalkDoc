@@ -5,6 +5,6 @@ import { uploads } from "../middlewares/uploads"
 const docRouter : Router = Router()
 
 docRouter.post("/" , uploads.single("document") , createDoc )
-docRouter.post("/chat" , chatDoc)
+docRouter.post("/:docId/chat" , chatDoc)
 
 export default docRouter

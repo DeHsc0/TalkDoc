@@ -22,8 +22,7 @@ const docCreationSchema = z.object({
 })
 
 const chatSchema = z.object({
-
-    docId : z.string().max(200),
+    
     searchQuery : z.string().max(600),
     userId : z.string()    
 
