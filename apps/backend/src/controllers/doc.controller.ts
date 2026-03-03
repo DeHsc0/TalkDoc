@@ -3,10 +3,10 @@ import { Request, Response } from "express";
 import { chatSchema, docCreationSchema } from "../types/zod";
 import path from "path";
 import { randomUUID } from "crypto";
-import z from "zod";
 import { db } from "@repo/database";
 import { docs } from "@repo/database/schema";
 import { eq, sql } from "drizzle-orm";
+import genai from "../config/ai";
 
 async function createDoc ( req : Request , res : Response) {
 
@@ -69,11 +69,25 @@ async function chatDoc ( req : Request , res : Response ) {
     try {
         
         const doc = await db.select().from(docs).where(eq(docs.id , docId))
+
+        if(doc.length <= 0) return res.status(400).json({
+
+            success : false,
+            error : "Doc not found"
+
+        })
+
+        const aiResponse = await genai.sendMessage({
+            message : `
+
+            Message : ${parsedData.data.searchQuery}
+            
+            `
+        })
         
         return res.status(200).json({
             success : true,
-            docId,
-            doc
+            res : aiResponse
         })
     
     }

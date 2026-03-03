@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@clerk/express": "^1.7.65",
+    "@google/genai": "^1.43.0",
     "@repo/database": "workspace:*",
     "@repo/queue": "workspace:*",
     "@repo/typescript-config": "workspace:*",

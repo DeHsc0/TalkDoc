@@ -17,3 +17,13 @@ export const docs = pgTable( "docs" , {
     description : varchar("description" , { length : 256 }),
     createdAt: timestamp("createdAt").defaultNow().notNull()
 })
+
+export const chats = pgTable( "chats" , {
+
+    id : uuid("id").primaryKey().defaultRandom().notNull(),
+    usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId).notNull(),
+    docId : varchar("docId", { length: 256 }).references(() => docs.id).notNull(),
+    aiResponse :  varchar("aiResponse", { length: 256 }).notNull(),
+    usersResponse : varchar("usersResponse" , { length : 256 }).notNull()
+
+} )
