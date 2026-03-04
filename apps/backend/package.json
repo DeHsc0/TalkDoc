@@ -13,6 +13,8 @@
   "dependencies": {
     "@clerk/express": "^1.7.65",
     "@google/genai": "^1.43.0",
+    "@langchain/qdrant": "^1.0.1",
+    "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/queue": "workspace:*",
     "@repo/typescript-config": "workspace:*",

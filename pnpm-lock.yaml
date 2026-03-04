@@ -26,6 +26,12 @@ importers:
       '@google/genai':
         specifier: ^1.43.0
         version: 1.43.0(bufferutil@4.1.0)
+      '@langchain/qdrant':
+        specifier: ^1.0.1
+        version: 1.0.1(@langchain/core@1.1.28(openai@6.25.0(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(typescript@5.9.3)
+      '@repo/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@repo/database':
         specifier: workspace:*
         version: link:../../packages/database

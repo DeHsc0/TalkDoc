@@ -1,16 +1,18 @@
 {
   "name": "@repo/config",
   "version": "0.0.0",
-  "main": "config.js",
+  "main": "./dist/config.js",
+  "types": "./dist/config.d.ts",
   "type": "module",
   "scripts": {
-    "build" : "tsc -b",
-    "dev" : "pnpm run build && node dist/config.js"
+    "build": "tsc -b",
+    "dev": "pnpm run build && node dist/config.js"
   },
-  "exports" : {
+  "exports": {
     ".": {
       "types": "./dist/config.d.ts",
-      "import": "./dist/config.js"
+      "import": "./dist/config.js",
+      "default": "./dist/config.js"
     }
   },
   "keywords": [],

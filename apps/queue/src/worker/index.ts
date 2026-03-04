@@ -24,10 +24,6 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
         const splitter = new CharacterTextSplitter({ chunkOverlap : 200 , chunkSize : 1500})
         const splitedDocs = await splitter.splitDocuments(doc)
         
-        const docsWithMeta = splitedDocs.map(doc => ({
-            ...doc,
-            metadata: { ...doc.metadata, docId : job.id }
-        }))
         
         
         const response = await db.insert(docs).values({
@@ -36,7 +32,19 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
             docName : job.data.originalName,
             description : job.data.description 
             
-        })
+        }).returning({ id : docs.id})
+
+        if(!response || !response[0])return {
+            success : false,
+            error : "Unable to process the file"
+        }
+        
+        const docId = response[0].id 
+
+        const docsWithMeta = splitedDocs.map(doc => ({
+            ...doc,
+            metadata: { ...doc.metadata, docId : docId }
+        }))
 
         const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings , {
             collectionName: "docs",
@@ -44,7 +52,7 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
         })
         const vecData = await vectorStore.addDocuments(docsWithMeta)
 
-        return { success : true }
+        return { success : true  }
 
     }
     catch (error) {

@@ -26,12 +26,12 @@
     "@langchain/core": "^1.1.28",
     "@langchain/qdrant": "^1.0.1",
     "@langchain/textsplitters": "^1.0.1",
+    "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "bullmq": "^5.69.2",
     "ioredis": "5.9.2",
     "pdf-parse": "^2.4.5",
-    "pdfjs-dist": "^2.16.105",
-    "@repo/config": "workspace:*"
+    "pdfjs-dist": "^2.16.105"
   }
 }

@@ -1,12 +1,12 @@
 import { fileQueue, queueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
 import { chatSchema, docCreationSchema } from "../types/zod";
-import path from "path";
-import { randomUUID } from "crypto";
+import path from "path"
 import { db } from "@repo/database";
-import { docs } from "@repo/database/schema";
-import { eq, sql } from "drizzle-orm";
-import genai from "../config/ai";
+import {  docs } from "@repo/database/schema";
+import {  eq } from "drizzle-orm"; 
+import { qdrantClient , embeddings } from "@repo/config";
+import { QdrantVectorStore } from "@langchain/qdrant";
 
 async function createDoc ( req : Request , res : Response) {
 
@@ -33,9 +33,11 @@ async function createDoc ( req : Request , res : Response) {
         userId : "62543b6c-aeee-4a71-9804-fc44cd010803",  // replace
         description : parseData.data.description                  
         
-    } , { jobId : randomUUID().toString() })
+    } )
 
     const job : { success : boolean , error ?: string } | any = await data.waitUntilFinished(queueEvents)  
+
+
 
     res.status(200).json({
         message : "Doc created Successfully",
@@ -57,6 +59,11 @@ async function chatDoc ( req : Request , res : Response ) {
 
     })
 
+    console.log({
+        docId,
+        type : typeof docId
+    })
+
     const parsedData = chatSchema.safeParse(req.body)
 
     if( !parsedData.success )return res.status(400).json({
@@ -68,26 +75,64 @@ async function chatDoc ( req : Request , res : Response ) {
 
     try {
         
-        const doc = await db.select().from(docs).where(eq(docs.id , docId))
+        const doc = await db.select().from(docs).where(eq(docs.id , docId.toString()))
 
         if(doc.length <= 0) return res.status(400).json({
 
             success : false,
-            error : "Doc not found"
+            error : "Doc not found",
+            docId
 
         })
 
-        const aiResponse = await genai.sendMessage({
-            message : `
+        const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings , {
+            collectionName: "docs",
+            client : qdrantClient
+        }) 
 
-            Message : ${parsedData.data.searchQuery}
+        const results = await qdrantClient.search("docs", {
+            vector: await embeddings.embedQuery(parsedData.data.searchQuery),
+            limit: 5,
+            filter: {
+                must: [
+                    {
+                        key: "metadata.docId",
+                        match: { value: docId }
+                    }
+                ]
+            }
+        })
+
+        // const pastResponses = await db.select().from(chats)
+        // .where(
+        //     and( 
+        //         eq(chats.docId , docId), 
+        //         eq( chats.usersClerkId , parsedData.data.userId ) 
             
-            `
-        })
+        //     ))
+        // .orderBy(desc(chats.createdAt))
+        // .limit(2)    
+
+        // const aiResponse = await model.generateContent({
+        //     model : "gemini-2.5-flash",
+        //     contents : `
+        //         {
+
+        //             context : ${},
+        //             pastMessages : ${pastResponses},
+        //             userQuery : ${}
+            
+        //         }
+            
+        //     `,
+        //     config : {
+        //         systemInstruction : ``
+        //     }
+        // })
         
         return res.status(200).json({
             success : true,
-            res : aiResponse
+            data : results
         })
     
     }
@@ -98,7 +143,7 @@ async function chatDoc ( req : Request , res : Response ) {
         return res.status(500).json({
 
             success : false,
-            error : String(err),
+            error : err,
         
         })
         
