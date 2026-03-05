@@ -28,5 +28,12 @@ const chatSchema = z.object({
 
 })
 
+const aiResSchema = z.object({
 
-export { docCreationSchema , chatSchema }
+    id : z.string(),
+    text : z.string()
+
+}) 
+
+
+export { docCreationSchema , chatSchema , aiResSchema }
