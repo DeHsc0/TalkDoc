@@ -10,27 +10,46 @@ export default function Home() {
 
   gsap.registerPlugin(Observer)
 
-  const container = useRef<HTMLDivElement | null>(null)
+  const navContainer = useRef<HTMLDivElement | null>(null)
+
+  const boxContainer = useRef< HTMLDivElement | null>(null)
 
   useEffect(() => {
 
-    if(!container)return    
+    if(!navContainer.current || !boxContainer.current )return    
+
+    const tl = gsap.timeline({ paused : true })
+
+    tl.to( navContainer.current , {
+
+      width : 515
+
+    })
+    .set(boxContainer.current , {
+      display : "flex"
+    })
+    .fromTo( boxContainer.current.children , {
+
+      scale : 1.1,
+      opacity : 0
+
+    } , {
+
+      scale : 1,
+      opacity : 1,
+      stagger : 0.4,
+
+    } , "-=0.1")
+
     Observer.create({
 
-    target : container.current,
-    onHover : () => {
-
-      gsap.to(container , {
-
-        width : 
-
-      })
-
-    }
+    target : navContainer.current,
+    onHover : () => tl.play(),
+    onHoverEnd : () => tl.reverse(0.5)
 
 
   })
-  } , [container])
+  } , [navContainer , boxContainer])
   
   return (
 
@@ -38,19 +57,49 @@ export default function Home() {
   
       <div className="absolute inset-4 rounded-2xl overflow-hidden ">
         <Silk
-          speed={0}
+          speed={5}
           scale={1}
           color="#5227ff"
-          noiseIntensity={6}
+          noiseIntensity={4}
           rotation={0}
         />
       </div>
 
       <div className="relative z-10 flex justify-center h-full p-6">
 
-        <div className="fixed items-center rounded-full backdrop-blur-sm py-4 px-6 bg-white/10" ref={container}>
+        <div className="fixed flex gap-3 items-center rounded-full backdrop-blur-sm py-4 px-6 bg-white/10 " ref={navContainer}>
 
-          <BookOpen className="text-white"/>
+              <div className="flex gap-2 items-center " >
+              
+                <BookOpen className="text-white"/>
+
+                <div className="gap-4 items-center hidden" ref={boxContainer}>
+                  
+                  <h1 className="font-mono text-md text-white">
+                    TalkDoc
+                  </h1>
+
+                  <button className="text-white text-md px-4 rounded-full ">
+                    
+                    Home
+
+                  </button>
+
+                  <button className="text-white text-md px-4 rounded-full ">
+                    
+                    How it Works
+
+                  </button>
+
+                  <button className="text-white text-md px-4 rounded-full ">
+
+                    Get Started
+
+                  </button>
+                
+                </div>
+
+          </div>
                             
         </div>
         
