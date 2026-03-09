@@ -1,0 +1,9 @@
+export const LIME = "#CCFF3A" as const;
+export const BLACK = "#0E0E0E" as const;
+export const WHITE = "#FFFFFF" as const;
+export const GRAY = "#666666" as const;
+export const BLUE = "#4D65FF" as const;
+export const GRAY_2  = "#2a2a2a" as const;
+export const GRAY_3  = "#1a1a1a" as const;
+export const SURFACE = "#111111" as const;
+export const RED     = "#FF4444" as const;
