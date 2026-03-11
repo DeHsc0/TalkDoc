@@ -30,7 +30,7 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
         const response = await db.insert(docs).values({
 
             usersClerkId : job.data.userId,
-            docName : job.data.originalName,
+            title : job.data.title,
             description : job.data.description,
             pages : totalPages,
             size : job.data.size

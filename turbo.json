@@ -29,7 +29,8 @@
       "cache": false
     },
     "db:push": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     }
   }
 }

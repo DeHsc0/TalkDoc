@@ -9,7 +9,6 @@ import axios from "axios";
 export default function Dashboard () {
 
     const [ gridState , setGridState ] = useState<"grid" | "col">("grid")
-    const [ loading , setLoading] = useState<boolean>(true) 
 
     const fetchDocs = async () => {
 

@@ -23,7 +23,15 @@ async function getDocs (req : Request , res : Response ) {
 
     })
 
-    const response = await db.select().from(docs).where(eq(docs.usersClerkId , parsedData.data.userId))
+    const response = await db.select({
+
+        title : docs.title,
+        description : docs.description,
+        pages : docs.pages,
+        size : docs.size,
+        createdAt : docs.createdAt
+
+    }).from(docs).where(eq(docs.usersClerkId , parsedData.data.userId))
 
     return res.status(200).json({
 
@@ -35,7 +43,7 @@ async function getDocs (req : Request , res : Response ) {
 
 async function createDoc ( req : Request , res : Response) {
 
-    const parseData = docCreationSchema.safeParse({
+    const parsedData = docCreationSchema.safeParse({
 
         name : req.body.name,
         document : req.file,
@@ -43,7 +51,7 @@ async function createDoc ( req : Request , res : Response) {
         
     })
 
-    if(!parseData.success) return res.status(400).json({
+    if(!parsedData.success) return res.status(400).json({
 
         success : false,
         error : "Invalid input"
@@ -56,15 +64,16 @@ async function createDoc ( req : Request , res : Response) {
 
     })
 
-    const size = (parseData.data.document.size / (1024 * 1024)).toFixed(2)
+    const size = (parsedData.data.document.size / (1024 * 1024)).toFixed(2)
     
     const data = await fileQueue.add("file", {
 
         filePath : path.resolve(req.file.path),
-        originalName : parseData.data.document.originalname,
+        originalName : parsedData.data.document.originalname,
         userId : "62543b6c-aeee-4a71-9804-fc44cd010803",  // replace
-        description : parseData.data.description, 
-        size   
+        description : parsedData.data.description, 
+        size,
+        title : parsedData.data.name
         
     } )
 

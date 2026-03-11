@@ -1,9 +1,8 @@
 "use client"
 import { Folder, Settings, Star } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu } from "./ui/sidebar";
-import { MenuData } from "../types";
+import { MenuData } from "../types/types";
 import { useSideBarMenu } from "../store";
-import { useEffect } from "react";
 
 export default function AppSideBar () {
 

@@ -13,7 +13,7 @@ export const users = pgTable('users', {
 export const docs = pgTable( "docs" , {
     id : uuid("id").primaryKey().defaultRandom().notNull(),
     usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId).notNull(),
-    docName : varchar("docName" , { length : 150 }).notNull(),
+    title : varchar("title" , { length : 150 }).notNull(),
     description : varchar("description" , { length : 256 }),
     pages : integer("pages"),
     size : varchar("size" , { length : 4 } ),

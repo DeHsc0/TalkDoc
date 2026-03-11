@@ -21,7 +21,7 @@ const getDocSchema = z.object({
 
 const docCreationSchema = z.object({
 
-    name : z.string().max(200).optional(),
+    name : z.string().max(200),
     document : fileSchema,
     description : z.string().optional()
     
