@@ -1,15 +1,49 @@
-
-import { Folder } from "lucide-react";
+"use client"
+import { Folder, Settings, Star } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu } from "./ui/sidebar";
+import { MenuData } from "../types";
+import { useSideBarMenu } from "../store";
+import { useEffect } from "react";
 
 export default function AppSideBar () {
 
-    const menuItems = ["Collection" , "Starred" , "Settings"]
+    const menuItems : MenuData[] = [
+        
+        {
 
-    
+            menuState : "collection",
+            icon : Folder,
+            fillColor : "amber-300",
+            title : "My Collection"
+
+        },
+            
+        {
+
+            menuState : "starred",
+            icon : Star,
+            fillColor : "amber-300",
+            title : "Starred"
+            
+
+        },
+        
+        {
+
+            menuState : "settings",
+            icon : Settings,
+            fillColor : "stone-500",
+            title : "Settings"
+
+        },
+
+    ]
+
+    const { menu , changeMenu } = useSideBarMenu()
+
     return (
 
-        <Sidebar>
+        <Sidebar collapsible="none" className="w-2/12" >
 
             <SidebarHeader className="p-8 border-b-2 border-b-[#1a1a1a]">
 
@@ -28,21 +62,36 @@ export default function AppSideBar () {
             </SidebarHeader>      
 
             <SidebarContent>
+                <div className="flex justify-center py-6 px-4 flex-col gap-5">
 
-                <div className="flex justify-center py-6 px-4">
+                    {
 
-                    <div className="p-2 bg-[#CCFF3A]/10 rounded-md w-full flex justify-center border-2 items-center gap-2" >
+                        menuItems.map((item) => {
+                            
 
-                        <Folder className="size-4 fill-amber-300 text-transparent" />
+                            return (
+                                <div key={menuItems.indexOf(item)} className="flex justify-center ">
+                                    
+                                    <div  onClick={() => changeMenu(item.menuState) } className={`p-2 select-none ${ item.menuState === menu && "bg-[#CCFF3A]/10" } hover:bg-[#CCFF3A]/10 rounded-md w-full flex border-2 border-transparent cursor-pointer items-center gap-2`} >
 
-                        <h1 className="font-rubik text-sm font-medium ">
-                            My Documents
-                        </h1>
+                                        <item.icon className={`size-4 fill-${item.fillColor} text-transparent`} />
 
-                    </div>
+                                        <h1 className="font-rubik text-sm font-medium ">
+                                            {item.title}
+                                        </h1>
 
+                                    </div>
+                                    
+                                </div>
+
+                            )
+
+                        })
+
+                    }
+                
                 </div>
-                                
+                           
             </SidebarContent>   
             
         </Sidebar>

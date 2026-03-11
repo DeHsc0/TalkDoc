@@ -12,22 +12,28 @@ import { unlink } from "fs"
 
 const worker = new Worker<FileJobData>("file-processing", async (job) => {
     
-    const data = job.data
-    
-    const loader = new PDFLoader(data.filePath , {
+    const loader = new PDFLoader(job.data.filePath , {
         pdfjs: () => import("pdfjs-dist/legacy/build/pdf.js"),
         splitPages : true
     })
     
     try {
+
+        console.log(job)
+
         const doc = await loader.load()
         const splitter = new CharacterTextSplitter({ chunkOverlap : 200 , chunkSize : 1500})
         const splitedDocs = await splitter.splitDocuments(doc)
+
+        const totalPages : number = splitedDocs[splitedDocs.length - 1]?.metadata.pdf.totalPages
+        
         const response = await db.insert(docs).values({
 
             usersClerkId : job.data.userId,
             docName : job.data.originalName,
-            description : job.data.description 
+            description : job.data.description,
+            pages : totalPages,
+            size : job.data.size
             
         }).returning({ id : docs.id})
 
@@ -58,9 +64,9 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
     
     } finally {
 
-        unlink(data.filePath , (err) => {
+        unlink(job.data.filePath , (err) => {
 
-            if (err) return console.error(`Failed to delete file ${data.filePath}: ` , err)
+            if (err) return console.error(`Failed to delete file ${job.data.filePath}: ` , err)
                 
         })
     

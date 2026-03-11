@@ -11,6 +11,8 @@
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@react-three/fiber": "^9.5.0",
+    "@types/axios": "^0.14.4",
+    "axios": "^1.13.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "gsap": "^3.14.2",
@@ -26,7 +28,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
-    "@repo/typescript-config" : "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

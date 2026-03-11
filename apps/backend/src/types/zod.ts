@@ -13,6 +13,12 @@ const fileSchema = z.object({
 
 })
 
+const getDocSchema = z.object({
+    
+    userId : z.string().max(200)
+
+})
+
 const docCreationSchema = z.object({
 
     name : z.string().max(200).optional(),
@@ -36,4 +42,4 @@ const aiResSchema = z.object({
 }) 
 
 
-export { docCreationSchema , chatSchema , aiResSchema }
+export { docCreationSchema , chatSchema , aiResSchema , getDocSchema }

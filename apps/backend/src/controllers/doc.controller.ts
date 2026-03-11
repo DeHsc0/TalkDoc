@@ -1,14 +1,37 @@
 import { fileQueue, queueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
-import { aiResSchema, chatSchema, docCreationSchema } from "../types/zod";
+import { aiResSchema, chatSchema, docCreationSchema, getDocSchema } from "../types/zod";
 import path from "path"
 import { db } from "@repo/database";
 import {  chats, docs } from "@repo/database/schema";
 import {  and, desc, eq } from "drizzle-orm"; 
 import { qdrantClient , embeddings } from "@repo/config";
-import { QdrantVectorStore } from "@langchain/qdrant";
 import { ai, aiResponseSchema } from "../config/ai";
 
+async function getDocs (req : Request , res : Response ) {
+
+    const parsedData = getDocSchema.safeParse({
+        
+        userId : req.body.userId
+
+    })
+
+    if(!parsedData.success)return res.status(400).json({
+
+        success : false,
+        error  : "Invalid Input"
+
+    })
+
+    const response = await db.select().from(docs).where(eq(docs.usersClerkId , parsedData.data.userId))
+
+    return res.status(200).json({
+
+        response
+
+    })
+
+} 
 
 async function createDoc ( req : Request , res : Response) {
 
@@ -22,28 +45,34 @@ async function createDoc ( req : Request , res : Response) {
 
     if(!parseData.success) return res.status(400).json({
 
-        message : "Invalid input",
-        errors : parseData.error.format()
+        success : false,
+        error : "Invalid input"
     })
 
-    if(!req.file)return
+    if(!req.file)return res.status(400).json({
+
+        success : false,
+        error : "Requires a document to create one"
+
+    })
+
+    const size = (parseData.data.document.size / (1024 * 1024)).toFixed(2)
     
     const data = await fileQueue.add("file", {
 
         filePath : path.resolve(req.file.path),
         originalName : parseData.data.document.originalname,
         userId : "62543b6c-aeee-4a71-9804-fc44cd010803",  // replace
-        description : parseData.data.description                  
+        description : parseData.data.description, 
+        size   
         
     } )
 
     const job : { success : boolean , error ?: string } | any = await data.waitUntilFinished(queueEvents)  
 
     res.status(200).json({
-        message : "Doc created Successfully",
-        f : req.file && path.resolve(req.file.path),
-        data, 
-        job
+        success : true,
+        message : "Doc created Successfully"
     })
 
 }
@@ -64,7 +93,7 @@ async function chatDoc ( req : Request , res : Response ) {
     if( !parsedData.success )return res.status(400).json({
 
         success : false,
-        error : parsedData.error.format()
+        error : "Invalid input"
 
     })
 
@@ -75,8 +104,7 @@ async function chatDoc ( req : Request , res : Response ) {
         if(doc.length <= 0) return res.status(400).json({
 
             success : false,
-            error : "Doc not found",
-            docId
+            error : "Doc not found"
 
         })
 
@@ -198,4 +226,4 @@ async function chatDoc ( req : Request , res : Response ) {
 
 }
 
-export { createDoc , chatDoc }    
+export { createDoc , chatDoc , getDocs }    
