@@ -1,14 +1,24 @@
 "use client"
-import { Columns, Grid, Plus } from "lucide-react";
+import { Columns, Ellipsis, Grid, Loader2Icon, MoveRight, Plus, SquareArrowOutUpRight } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "../../components/ui/toggle-group";
 import { Input } from "../../components/ui/input";
 import { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import axios from "axios";
+import { DocSchema } from "../../types/zod"
+import z from "zod";
+import AppSideBar from "../../components/AppSideBar";
+import DocCard from "../../components/DocCard";
 
 export default function Dashboard () {
 
     const [ gridState , setGridState ] = useState<"grid" | "col">("grid")
+
+    const [ docData , setDocData ] = useState<z.infer<typeof DocSchema>>([])
+
+    const [ loading , setLoading ] = useState<boolean>(true) 
+
+    const colors : string[] = [ "#4D65FF" , "#CCFF3A" , "#FF4444" , "#FFB800" , "#702949" , "#00D4AA" , "#FF6B35" ]
 
     const fetchDocs = async () => {
 
@@ -18,8 +28,16 @@ export default function Dashboard () {
 
         })
 
-        console.log(response)
-        
+        const parsedResponse = DocSchema.safeParse(response.data.response)
+
+        if(!parsedResponse.success){
+            //alert
+            console.log("Failed to validate")
+            return            
+        }
+
+        setDocData(() => parsedResponse.data)        
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -28,53 +46,77 @@ export default function Dashboard () {
         
 
     } , [])
-    
+
     return (
+    
+        !loading ? <div className="flex w-full">
 
-        <div className="w-full">
+            <AppSideBar  />
 
-            <div className="w-full py-4 px-6 border-b-2 flex justify-between">
+            <div className="w-full">
 
-                <Input placeholder="🔍 Search documents..." className="font-rubik text-white/80 w-1/4"/>
-                <div className="flex gap-4 items-center">
+                <div className="w-full py-4 px-6 border-b-2 flex justify-between">
 
-                    <ToggleGroup defaultValue={gridState} className="border" type="single" onValueChange={ (val : "grid" | "col")  => setGridState(val)}>
-                        <ToggleGroupItem value="grid">
-                            <Grid/>
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="col">
-                            <Columns/>
-                        </ToggleGroupItem>
-                    </ToggleGroup>
+                    <Input placeholder="🔍 Search documents..." className="font-rubik text-white/80 w-1/4"/>
+                    <div className="flex gap-4 items-center">
 
-                    <Button className="font-space bg-[#CCFF3A] hover:bg-[#CCFF3A]/80">
+                        <ToggleGroup defaultValue={gridState} className="border" type="single" onValueChange={ (val : "grid" | "col")  => setGridState(val)}>
+                            <ToggleGroupItem value="grid">
+                                <Grid/>
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="col">
+                                <Columns/>
+                            </ToggleGroupItem>
+                        </ToggleGroup>
 
-                        <Plus/>
+                        <Button className="font-space bg-[#CCFF3A] hover:bg-[#CCFF3A]/80">
 
-                        New Doc                        
+                            <Plus/>
 
-                    </Button>
-                    
-                </div>
+                            New Doc                        
 
-            </div>        
+                        </Button>
+                        
+                    </div>
 
-            <div className="py-8 px-6">
+                </div>        
 
-                <div>
+                <div className="py-8 px-6">
 
-                    <h1 className="font-rubik text-2xl ">
-                        My Documents
-                    </h1>
+                    <div>
 
-                    <p className="font-sans text-[#666666]" >6 documents</p>
-                                    
-                </div>                
-                            
-            </div>           
+                        <h1 className="font-rubik text-2xl ">
+                            My Documents
+                        </h1>
+
+                        <p className="font-sans text-[#666666]" >6 documents</p>
+                                        
+                    </div>                
+
+                    <div className="grid grid-cols-3 mt-5 gap-5">
+
+                        {
+
+                            docData.map((item) => {
+
+                                return <DocCard color={colors[Math.floor(Math.random() * colors.length)] || "#000000"} key={docData.indexOf(item)} docData={item} />
+
+                            })
+
+                        }
+                        
+
+                    </div>
+                                
+                </div>           
+
+            </div>
 
         </div>
 
+     : <div  className="w-full h-full flex justify-center items-center">
+        <Loader2Icon className="animate-spin size-10"/>
+     </div>
     )
 
 

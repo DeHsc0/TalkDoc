@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       
       <main className={`${spaceMono.variable} ${rubik.variable} flex w-full`}>
-        <AppSideBar  />
+    
         {children}
       </main>
     
