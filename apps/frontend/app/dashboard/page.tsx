@@ -93,7 +93,7 @@ export default function Dashboard () {
                                         
                     </div>                
 
-                    <div className="grid grid-cols-3 mt-5 gap-5">
+                    <div className="grid grid-cols-3 mt-5 gap-5 ">
 
                         {
 

@@ -1,5 +1,12 @@
-import { Ellipsis, MoveRight } from "lucide-react";
+import { Ellipsis, MoveRight, Pen } from "lucide-react";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
 
 export default function DocCard (props : {
 
@@ -14,7 +21,7 @@ export default function DocCard (props : {
 
 }) {
 
-
+    
 
     return (
         <div style={{
@@ -25,15 +32,52 @@ export default function DocCard (props : {
 
             <div className="flex flex-col py-4 px-6">
 
-                <div className="flex justify-between items-center w-full pb-4 border-b">
+                <div className="flex flex-col w-full pb-4 border-b">
                     
-                    <h1 className="font-rubik ">
-                        Risk Asset Framework
-                    </h1>
+                    <div className="flex w-full justify-between">
+                        <h1 className="font-rubik ">
+                            {props.docData.title}
+                        </h1>
 
-                    <Button size={"icon-sm"} variant={"outline"} className="">
-                        <Ellipsis />
-                    </Button>
+                        <DropdownMenu>
+
+                            <DropdownMenuTrigger asChild>
+
+                                <Button size={"icon-sm"} variant={"outline"} className="">
+                                    <Ellipsis />
+                                </Button>
+
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+
+                                <DropdownMenuGroup>
+
+                                    <DropdownMenuItem className="font-rubik">
+
+                                        Rename
+
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="font-rubik">
+
+                                        Delete
+
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="font-rubik">
+
+                                        Open Chat
+
+                                    </DropdownMenuItem>
+
+                                </DropdownMenuGroup>
+
+                            </DropdownMenuContent>
+
+                        </DropdownMenu>
+                    </div>
+
+                    <p className="font-rubik text-[#666666]">
+                        {props.docData.description}
+                    </p>
 
                 </div>
 
@@ -45,7 +89,7 @@ export default function DocCard (props : {
                         </p>
 
                         <p>
-                            67
+                            { props.docData.pages}
                         </p>
 
                     </div>
@@ -55,7 +99,7 @@ export default function DocCard (props : {
                         </p>
 
                         <p>
-                            2.1
+                            {props.docData.size}
                         </p>
 
                     </div>
@@ -65,7 +109,13 @@ export default function DocCard (props : {
                         </p>
 
                         <p>
-                            8 March 2019
+                            {new Date(props.docData.createdAt).toLocaleDateString("en-GB" , {
+
+                                day : "numeric",
+                                month : "long",
+                                year : "numeric"
+
+                            })}
                         </p>
 
                     </div>
