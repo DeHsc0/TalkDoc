@@ -6,16 +6,16 @@ import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { Observer } from "gsap/all"
 
+gsap.registerPlugin(Observer)
 export default function Home() {
 
   
-  gsap.registerPlugin(Observer)
 
   const navContainer = useRef<HTMLDivElement | null>(null)
 
   const boxContainer = useRef< HTMLDivElement | null>(null)
 
-  useEffect(() => {
+  useGSAP(() => {
 
     if(!navContainer.current || !boxContainer.current )return    
 
@@ -50,7 +50,7 @@ export default function Home() {
 
 
   })
-  } , [navContainer , boxContainer])
+  } , { dependencies : [] , scope : navContainer })
 
   return (
 

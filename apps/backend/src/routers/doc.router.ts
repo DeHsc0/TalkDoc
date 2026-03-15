@@ -6,6 +6,6 @@ const docRouter : Router = Router()
 
 docRouter.post("/create" , uploads.single("document") , createDoc )
 docRouter.get( "/:userId" , getDocs )
-docRouter.delete("/" , deleteDoc)
+docRouter.delete("/:docId" , deleteDoc)
 
 export default docRouter

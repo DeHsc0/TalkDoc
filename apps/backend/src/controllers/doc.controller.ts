@@ -23,6 +23,7 @@ async function getDocs (req : Request , res : Response ) {
 
         const response = await db.select({
 
+            id : docs.id,
             title : docs.title,
             description : docs.description,
             pages : docs.pages,
@@ -41,7 +42,9 @@ async function getDocs (req : Request , res : Response ) {
     
     catch(e){
 
-        return res.status(400).json({
+        console.error("Failed to fetch documents:", e)
+        
+        return res.status(500).json({
 
             success : false,
             message : "Failed to fetch documents"
@@ -99,9 +102,9 @@ async function createDoc ( req : Request , res : Response) {
 
 async function deleteDoc ( req : Request , res : Response) {
 
-    const parsedData = deleteDocSchema.safeParse(req.body)
-    
-    if(!parsedData.success)return res.status(400).json({
+    const { docId } = req.params
+
+    if(!docId)return res.status(400).json({
 
         success : false,
         message : "Invalid input"
@@ -114,8 +117,8 @@ async function deleteDoc ( req : Request , res : Response) {
 
             and(
 
-                eq( docs.usersClerkId , parsedData.data.userId),
-                eq( docs.id , parsedData.data.docId)
+                eq( docs.usersClerkId , "62543b6c-aeee-4a71-9804-fc44cd010803"), // replace
+                eq( docs.id , docId)
 
             )
         )
@@ -129,11 +132,12 @@ async function deleteDoc ( req : Request , res : Response) {
     }
     catch (e) {
 
-        return res.status(400).json({
+        console.error( "Failed to delete document: " , e )
+
+        return res.status(500).json({
 
             success : false,
-            message : "Failed to delete the doc",
-            error : e
+            message : "Failed to delete the doc"
         })
 
     }
