@@ -13,8 +13,9 @@ const fileSchema = z.object({
 
 })
 
-const getDocSchema = z.object({
-    
+const deleteDocSchema = z.object({
+
+    docId : z.string().max(200),
     userId : z.string().max(200)
 
 })
@@ -30,7 +31,8 @@ const docCreationSchema = z.object({
 const chatSchema = z.object({
     
     searchQuery : z.string().max(600),
-    userId : z.string()    
+    userId : z.string(),
+    docId : z.string()    
 
 })
 
@@ -42,4 +44,4 @@ const aiResSchema = z.object({
 }) 
 
 
-export { docCreationSchema , chatSchema , aiResSchema , getDocSchema }
+export { docCreationSchema , chatSchema , aiResSchema ,  deleteDocSchema }

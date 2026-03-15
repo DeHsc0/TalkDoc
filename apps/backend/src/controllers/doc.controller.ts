@@ -1,43 +1,54 @@
 import { fileQueue, queueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
-import { aiResSchema, chatSchema, docCreationSchema, getDocSchema } from "../types/zod";
+import { aiResSchema, chatSchema, deleteDocSchema, docCreationSchema } from "../types/zod";
 import path from "path"
 import { db } from "@repo/database";
 import {  chats, docs } from "@repo/database/schema";
-import {  and, desc, eq } from "drizzle-orm"; 
+import {  and , desc , eq } from "drizzle-orm"; 
 import { qdrantClient , embeddings } from "@repo/config";
 import { ai, aiResponseSchema } from "../config/ai";
 
 async function getDocs (req : Request , res : Response ) {
 
-    const parsedData = getDocSchema.safeParse({
-        
-        userId : req.body.userId
+    const { userId } = req.params
 
-    })
-
-    if(!parsedData.success)return res.status(400).json({
+    if(!userId)return res.status(400).json({
 
         success : false,
-        error  : "Invalid Input"
+        error  : "Missing userId"
 
     })
 
-    const response = await db.select({
+    try{
 
-        title : docs.title,
-        description : docs.description,
-        pages : docs.pages,
-        size : docs.size,
-        createdAt : docs.createdAt
+        const response = await db.select({
 
-    }).from(docs).where(eq(docs.usersClerkId , parsedData.data.userId))
+            title : docs.title,
+            description : docs.description,
+            pages : docs.pages,
+            size : docs.size,
+            createdAt : docs.createdAt
 
-    return res.status(200).json({
+        }).from(docs).where(eq(docs.usersClerkId , userId))
 
-        response
+        return res.status(200).json({
 
-    })
+            response
+
+        })
+    
+    }
+    
+    catch(e){
+
+        return res.status(400).json({
+
+            success : false,
+            message : "Failed to fetch documents"
+
+        })
+
+    }
 
 } 
 
@@ -86,153 +97,47 @@ async function createDoc ( req : Request , res : Response) {
 
 }
 
-async function chatDoc ( req : Request , res : Response ) {
+async function deleteDoc ( req : Request , res : Response) {
 
-    const { docId } = req.params 
+    const parsedData = deleteDocSchema.safeParse(req.body)
     
-    if(!docId)return res.status(400).json({
-
-        sucess : false,
-        error : "Missing docId param"
-
-    })
-
-    const parsedData = chatSchema.safeParse(req.body)
-
-    if( !parsedData.success )return res.status(400).json({
+    if(!parsedData.success)return res.status(400).json({
 
         success : false,
-        error : "Invalid input"
+        message : "Invalid input"
 
     })
 
-    try {
-        
-        const doc = await db.select().from(docs).where(eq(docs.id , docId.toString()))
+    try{
 
-        if(doc.length <= 0) return res.status(400).json({
+        const response = await db.delete(docs).where(
 
-            success : false,
-            error : "Doc not found"
+            and(
 
-        })
+                eq( docs.usersClerkId , parsedData.data.userId),
+                eq( docs.id , parsedData.data.docId)
 
-        const results = await qdrantClient.search("docs", {
-            vector: await embeddings.embedQuery(parsedData.data.searchQuery),
-            limit: 5,
-            filter: {
-                must: [
-                    {
-                        key: "metadata.docId",
-                        match: { value: docId }
-                    }
-                ]
-            }
-        })
+            )
+        )
 
-        const pastResponses = await db.select().from(chats)
-        .where(
-            and( 
-                eq(chats.docId , docId), 
-                eq( chats.usersClerkId , parsedData.data.userId ) 
-            
-            ))
-        .orderBy(desc(chats.createdAt))
-        .limit(2)
-
-        const context = results.map((e) => {
-            return {
-                id : e.id,
-                contents : e.payload?.content
-            }
-        })
-
-        const aiResponse = await ai.models.generateContent({
-            model : "gemini-2.5-flash",
-            contents : `
-                {
-                    context : ${JSON.stringify(context)},
-                    pastMessages : ${JSON.stringify(pastResponses)},
-                    userQuery : ${parsedData.data.searchQuery}
-            
-                }
-            
-            `,
-            config : {
-                systemInstruction : `So you are an helpfull ai which answers users questions based on the inputs and user dosent know abou the relevant chunks or past messages so just answer what he asks based on the inputs
-
-                InputSchema : {
-
-                    context : {
-
-                        type : string,
-                        description : Contains the relavant chunks of the document about which the users is asking questions
-
-                    },
-                    pastMessages : {
-
-                        type : string,
-                        description :  contains your past conversations with the user
-                    },
-                    userQuery : {
-                        type : string,
-                        description : user query                    
-                    }
-                
-                }
-
-                outputSchema : {
-                    id : {
-                        type : uuid,
-                        description : id of the most relavant chunk provided in the context 
-                        example : 1a7be80a-c57f-4ef2-8bb2-a4b79e66f1a6                    
-                    },
-                    text : {
-                        type : string,
-                        description : answer to user's question
-                    }
-                }`,
-                responseMimeType : "application/json",
-                responseSchema : aiResponseSchema
-            }
-        })
-
-        if(!aiResponse || !aiResponse.text)return res.status(400).json({
-
-            success : false,
-            error : "Failed to fetch ai response"
-
-        }) 
-
-        const parsedAiResponse = aiResSchema.safeParse((JSON.parse(aiResponse.text)))
-
-        if(!parsedAiResponse)return 
-
-        const relevantDoc = results.find((e) => e.id === parsedAiResponse.data?.id)
-        
         return res.status(200).json({
-            success : true,
-            data : parsedAiResponse,
-            relevantDoc
+
+            response
+
         })
-    
+
     }
-    catch(err) {
+    catch (e) {
 
-        console.error("Original DB error:", err)
-
-        return res.status(500).json({
+        return res.status(400).json({
 
             success : false,
-            error : "Internal Server Error",
-        
+            message : "Failed to delete the doc",
+            error : e
         })
-        
 
     }
-
-
 
 }
 
-export { createDoc , chatDoc , getDocs }    
+export { createDoc , getDocs , deleteDoc }    

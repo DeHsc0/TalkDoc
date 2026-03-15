@@ -7,6 +7,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
+import { useState } from "react";
+import axios from "axios";
 
 export default function DocCard (props : {
 
@@ -21,7 +23,12 @@ export default function DocCard (props : {
 
 }) {
 
-    
+    const deleteDoc = async () => {
+
+        const response = await axios.delete("http://localhost:3001/doc")
+
+    }
+
 
     return (
         <div style={{
@@ -52,7 +59,7 @@ export default function DocCard (props : {
 
                                 <DropdownMenuGroup>
 
-                                    <DropdownMenuItem className="font-rubik">
+                                    <DropdownMenuItem onClick={() => {}} className="font-rubik">
 
                                         Rename
 
