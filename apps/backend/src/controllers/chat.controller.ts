@@ -5,8 +5,18 @@ import { and, desc, eq } from "drizzle-orm"
 import { db } from "@repo/database"
 import { embeddings, qdrantClient } from "@repo/config"
 import { ai, aiResponseSchema } from "../config/ai"
+import { getAuth } from "@clerk/express"
 
 async function chatDoc ( req : Request , res : Response ) {
+
+    const { userId } = getAuth(req)
+
+    if(!userId)return res.status(301).json({
+
+        success : false, 
+        message : "UnAuthorized"
+
+    })
 
     const parsedData = chatSchema.safeParse(req.body)
 
@@ -45,7 +55,7 @@ async function chatDoc ( req : Request , res : Response ) {
         .where(
             and( 
                 eq(chats.docId , parsedData.data.docId), 
-                eq( chats.usersClerkId , parsedData.data.userId ) 
+                eq( chats.usersClerkId , userId ) 
             
             ))
         .orderBy(desc(chats.createdAt))

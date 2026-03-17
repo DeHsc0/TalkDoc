@@ -19,8 +19,6 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
     
     try {
 
-        console.log(job)
-
         const doc = await loader.load()
         const splitter = new CharacterTextSplitter({ chunkOverlap : 200 , chunkSize : 1500})
         const splitedDocs = await splitter.splitDocuments(doc)

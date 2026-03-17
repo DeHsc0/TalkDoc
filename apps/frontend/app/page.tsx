@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react"
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { Observer } from "gsap/all"
+import { SignUpButton } from "@clerk/nextjs"
 
 gsap.registerPlugin(Observer)
 export default function Home() {
@@ -92,11 +93,16 @@ export default function Home() {
 
                   </button>
 
-                  <button className="text-white text-md px-4 rounded-full ">
+                  <SignUpButton >
 
-                    Get Started
+                    <button className="text-white text-md px-4 rounded-full ">
 
-                  </button>
+                      Get Started
+
+                    </button>
+                  
+                  </SignUpButton>
+
                 
                 </div>
 

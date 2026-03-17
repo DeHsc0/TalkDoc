@@ -1,6 +1,20 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Space_Mono , Rubik} from "next/font/google"
+
+
+const spaceMono = Space_Mono({
+  weight : "700",
+  variable : "--font-space-mono"
+})
+
+const rubik = Rubik({
+
+  variable : "--font-rubik"
+
+})
 
 
 export const metadata: Metadata = {
@@ -14,19 +28,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`antialiased bg-[#0E0E0E]`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
+    <ClerkProvider>
+
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${spaceMono.variable} ${rubik.variable}  antialiased bg-[#0E0E0E]`}
         >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    
+    </ClerkProvider>
   );
 }

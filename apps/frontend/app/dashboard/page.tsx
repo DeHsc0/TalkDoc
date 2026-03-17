@@ -1,14 +1,15 @@
 "use client"
-import { Columns, Ellipsis, Grid, Loader2Icon, MoveRight, Plus, SquareArrowOutUpRight } from "lucide-react";
+import { Columns, Grid, Loader2Icon } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "../../components/ui/toggle-group";
 import { Input } from "../../components/ui/input";
 import { useEffect, useState } from "react";
-import { Button } from "../../components/ui/button";
 import axios from "axios";
 import { DocSchema } from "../../types/zod"
 import z from "zod";
 import AppSideBar from "../../components/AppSideBar";
 import DocCard from "../../components/DocCard";
+import { useAuth } from "@clerk/nextjs";
+import DocCreation from "../../components/DocCreation";
 
 export default function Dashboard () {
 
@@ -18,15 +19,21 @@ export default function Dashboard () {
 
     const [ loading , setLoading ] = useState<boolean>(true) 
 
+    const { getToken }  = useAuth()
+
     const colors : string[] = [ "#4D65FF" , "#CCFF3A" , "#FF4444" , "#FFB800" , "#702949" , "#00D4AA" , "#FF6B35" ]
 
     const fetchDocs = async () => {
 
-        const response = await axios.post( "http://localhost:3001/api/doc/" , {
-            
-            userId : "62543b6c-aeee-4a71-9804-fc44cd010803" // replace
+        const response = await axios.get( "http://localhost:3001/api/doc/" , {
 
-        })
+            headers : {
+
+                Authorization : `Bearer ${ await getToken()}`
+
+            }
+
+        } )
 
         const parsedResponse = DocSchema.safeParse(response.data.response)
 
@@ -69,13 +76,7 @@ export default function Dashboard () {
                             </ToggleGroupItem>
                         </ToggleGroup>
 
-                        <Button className="font-space bg-[#CCFF3A] hover:bg-[#CCFF3A]/80">
-
-                            <Plus/>
-
-                            New Doc                        
-
-                        </Button>
+                        <DocCreation/>
                         
                     </div>
 
@@ -89,7 +90,7 @@ export default function Dashboard () {
                             My Documents
                         </h1>
 
-                        <p className="font-sans text-[#666666]" >6 documents</p>
+                        <p className="font-sans text-[#666666]" >{docData.length} documents</p>
                                         
                     </div>                
 

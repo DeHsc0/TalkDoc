@@ -71,9 +71,9 @@ export async function webHookController( req : Request , res : Response) {
                 error : "Please provide an email address"
             })
 
-            const response =  db.insert(users).values({
+            const response = await db.insert(users).values({
 
-                username,
+                userName : username,
                 email : email_addresses[0].email_address,
                 clerkId : id
 
@@ -151,7 +151,7 @@ export async function webHookController( req : Request , res : Response) {
 
             await db.update(users).set({
                 email : emailAddress,
-                username
+                userName : username
             }).where(eq( users.clerkId , id))
 
         } catch (err) {

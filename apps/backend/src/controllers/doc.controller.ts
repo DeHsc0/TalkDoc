@@ -1,16 +1,15 @@
 import { fileQueue, queueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
-import { aiResSchema, chatSchema, deleteDocSchema, docCreationSchema } from "../types/zod";
+import { docCreationSchema } from "../types/zod";
 import path from "path"
 import { db } from "@repo/database";
-import {  chats, docs } from "@repo/database/schema";
-import {  and , desc , eq } from "drizzle-orm"; 
-import { qdrantClient , embeddings } from "@repo/config";
-import { ai, aiResponseSchema } from "../config/ai";
+import {  docs } from "@repo/database/schema";
+import {  and , eq } from "drizzle-orm";
+import { getAuth } from "@clerk/express";
 
 async function getDocs (req : Request , res : Response ) {
 
-    const { userId } = req.params
+    const { userId } = getAuth(req)
 
     if(!userId)return res.status(400).json({
 
@@ -57,6 +56,15 @@ async function getDocs (req : Request , res : Response ) {
 
 async function createDoc ( req : Request , res : Response) {
 
+    const { userId } = getAuth(req)
+
+    if(!userId)return res.status(400).json({
+
+        success : false,
+        error  : "Missing userId"
+
+    })
+
     const parsedData = docCreationSchema.safeParse({
 
         name : req.body.name,
@@ -84,7 +92,7 @@ async function createDoc ( req : Request , res : Response) {
 
         filePath : path.resolve(req.file.path),
         originalName : parsedData.data.document.originalname,
-        userId : "62543b6c-aeee-4a71-9804-fc44cd010803",  // replace
+        userId ,
         description : parsedData.data.description, 
         size,
         title : parsedData.data.name
@@ -104,6 +112,15 @@ async function deleteDoc ( req : Request , res : Response) {
 
     const { docId } = req.params
 
+    const { userId } = getAuth(req)
+
+    if(!userId)return res.status(301).json({
+
+        success : false,
+        message : "UnAuthorized"
+
+    })
+
     if(!docId)return res.status(400).json({
 
         success : false,
@@ -117,7 +134,7 @@ async function deleteDoc ( req : Request , res : Response) {
 
             and(
 
-                eq( docs.usersClerkId , "62543b6c-aeee-4a71-9804-fc44cd010803"), // replace
+                eq( docs.usersClerkId , userId),
                 eq( docs.id , docId)
 
             )

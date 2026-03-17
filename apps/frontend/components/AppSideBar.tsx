@@ -12,7 +12,7 @@ export default function AppSideBar () {
 
             menuState : "collection",
             icon : Folder,
-            fillColor : "amber-300",
+            fillColor : "fill-amber-300",
             title : "My Collection"
 
         },
@@ -21,7 +21,7 @@ export default function AppSideBar () {
 
             menuState : "starred",
             icon : Star,
-            fillColor : "amber-300",
+            fillColor : "fill-amber-300",
             title : "Starred"
             
 
@@ -31,7 +31,7 @@ export default function AppSideBar () {
 
             menuState : "settings",
             icon : Settings,
-            fillColor : "stone-500",
+            fillColor : "fill-stone-500",
             title : "Settings"
 
         },
@@ -66,14 +66,13 @@ export default function AppSideBar () {
                     {
 
                         menuItems.map((item) => {
-                            
 
                             return (
                                 <div key={menuItems.indexOf(item)} className="flex justify-center ">
                                     
                                     <div  onClick={() => changeMenu(item.menuState) } className={`p-2 select-none ${ item.menuState === menu && "bg-[#CCFF3A]/10" } hover:bg-[#CCFF3A]/10 rounded-md w-full flex border-2 border-transparent cursor-pointer items-center gap-2`} >
-
-                                        <item.icon className={`size-4 fill-${item.fillColor} text-transparent`} />
+                                        
+                                        <item.icon className={`size-4 ${item.fillColor} text-transparent`} />
 
                                         <h1 className="font-rubik text-sm font-medium ">
                                             {item.title}
