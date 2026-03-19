@@ -1,11 +1,12 @@
 import { fileQueue, queueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
 import { docCreationSchema } from "../types/zod";
-import path from "path"
+import path, { parse } from "path"
 import { db } from "@repo/database";
 import {  docs } from "@repo/database/schema";
 import {  and , eq } from "drizzle-orm";
 import { getAuth } from "@clerk/express";
+import { qdrantClient } from "@repo/config";
 
 async function getDocs (req : Request , res : Response ) {
 
@@ -76,7 +77,8 @@ async function createDoc ( req : Request , res : Response) {
     if(!parsedData.success) return res.status(400).json({
 
         success : false,
-        error : "Invalid input"
+        error : "Invalid input",
+        e : parsedData.error
     })
 
     if(!req.file)return res.status(400).json({
@@ -99,10 +101,27 @@ async function createDoc ( req : Request , res : Response) {
         
     } )
 
-    const job : { success : boolean , error ?: string } | any = await data.waitUntilFinished(queueEvents)  
+    const job : { success : boolean , error ?: string , data : {
+        id : string
+        createdAt: Date;
+        title: string;
+        description: string | null;
+        pages: number | null;
+        size: string | null;
+    } 
 
-    res.status(200).json({
+    } = await data.waitUntilFinished(queueEvents)  
+
+    if(!job.success)return res.status(400).json({
+
+        success : false,
+        message : "Failed to create a doc"
+
+    })
+
+    return res.status(200).json({
         success : true,
+        data: job.data,
         message : "Doc created Successfully"
     })
 
@@ -129,6 +148,23 @@ async function deleteDoc ( req : Request , res : Response) {
     })
 
     try{
+
+        const vector = await qdrantClient.delete( "docs" , {
+
+         filter : {
+
+            must : [
+
+                {
+                    key : "metadata.docId",
+                    match : { value : docId}
+                }
+            
+            ]
+
+         }   
+
+        })
 
         const response = await db.delete(docs).where(
 

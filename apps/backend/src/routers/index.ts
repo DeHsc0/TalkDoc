@@ -7,6 +7,6 @@ const apiRouter : Router = Router()
 
 apiRouter.use("/webhook" , webhookRouter )
 apiRouter.use("/doc" , docRouter )
-apiRouter.use("/chat" , chatRouter)
+apiRouter.use("/chats" , chatRouter)
 
 export default apiRouter

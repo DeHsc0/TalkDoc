@@ -33,7 +33,7 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
             pages : totalPages,
             size : job.data.size
             
-        }).returning({ id : docs.id})
+        }).returning()
 
         if(!response || !response[0])return {
             success : false,
@@ -53,7 +53,7 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
         })
         const vecData = await vectorStore.addDocuments(docsWithMeta)
 
-        return { success : true  }
+        return { success : true , data : response[0] }
 
     }
     catch (error) {

@@ -19,14 +19,15 @@
       "persistent": true
     },
     "dev:worker": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
     "db:generate": {
-      "cache": false
+      "cache": false,
+      "persistent" : true
     },
     "db:migrate": {
-      "cache": false
+      "cache": false,
+      "persistent" : true
     },
     "db:push": {
       "cache": false,

@@ -1,6 +1,6 @@
 
-import {create} from "zustand" 
-import { devtools, persist } from "zustand/middleware"
+import { create } from "zustand" 
+import { devtools  } from "zustand/middleware"
 import { SideBarMenuState } from "../types/types"
 
 interface MenuState {

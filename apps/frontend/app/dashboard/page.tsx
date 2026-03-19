@@ -4,7 +4,7 @@ import { ToggleGroup, ToggleGroupItem } from "../../components/ui/toggle-group";
 import { Input } from "../../components/ui/input";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { DocSchema } from "../../types/zod"
+import { docSchema } from "../../types/zod"
 import z from "zod";
 import AppSideBar from "../../components/AppSideBar";
 import DocCard from "../../components/DocCard";
@@ -15,13 +15,11 @@ export default function Dashboard () {
 
     const [ gridState , setGridState ] = useState<"grid" | "col">("grid")
 
-    const [ docData , setDocData ] = useState<z.infer<typeof DocSchema>>([])
+    const [ docData , setDocData ] = useState<z.infer<typeof docSchema>>([])
 
     const [ loading , setLoading ] = useState<boolean>(true) 
 
     const { getToken }  = useAuth()
-
-    const colors : string[] = [ "#4D65FF" , "#CCFF3A" , "#FF4444" , "#FFB800" , "#702949" , "#00D4AA" , "#FF6B35" ]
 
     const fetchDocs = async () => {
 
@@ -35,7 +33,7 @@ export default function Dashboard () {
 
         } )
 
-        const parsedResponse = DocSchema.safeParse(response.data.response)
+        const parsedResponse = docSchema.safeParse(response.data.response)
 
         if(!parsedResponse.success){
             //alert
@@ -76,7 +74,7 @@ export default function Dashboard () {
                             </ToggleGroupItem>
                         </ToggleGroup>
 
-                        <DocCreation/>
+                        <DocCreation addDoc={(item) => setDocData( [ ...docData, item ] )} />
                         
                     </div>
 
@@ -100,7 +98,7 @@ export default function Dashboard () {
 
                             docData.map((item) => {
 
-                                return <DocCard color={colors[Math.floor(Math.random() * colors.length)] || "#000000"} key={docData.indexOf(item)} docData={item} />
+                                return <DocCard deleteDoc={(id: string) => setDocData(prev => prev.filter(item => item.id !== id))} key={docData.indexOf(item)} docData={item} />
 
                             })
 

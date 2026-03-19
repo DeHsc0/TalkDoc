@@ -1,4 +1,4 @@
-import { Ellipsis, MoveRight, Pen } from "lucide-react";
+import { Ellipsis, MoveRight } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -7,35 +7,58 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function DocCard (props : {
 
     docData : {
-        title: string;
-        pages: number;
-        size: string;
-        description: string;
-        createdAt: string;
+        id : string
+        title: string
+        pages: number
+        size: string
+        description: string
+        createdAt: string
     },
-    color : string
+
+    deleteDoc : (id : string) => void
 
 }) {
 
-    const deleteDoc = async () => {
+    const { getToken } = useAuth()
 
-        const response = await axios.delete("http://localhost:3001/doc")
+    const router = useRouter()
+
+    const colors : string[] = [ "#4D65FF" , "#CCFF3A" , "#FF4444" , "#FFB800" , "#702949" , "#00D4AA" , "#FF6B35" ]
+
+    const handleDocDelete = async () => {
+
+        const response = await axios.delete(`http://localhost:3001/api/doc/${props.docData.id}` , {
+
+            headers : {
+                Authorization : `Bearer ${ await getToken()}`
+            }
+
+        } )
+
+        if(response.status !== 200)return // alert
+        
+        props.deleteDoc(props.docData.id)
+
 
     }
+
+    const [nativeColor , setNativeColor] = useState<string>(colors[Math.floor(Math.random() * colors.length)] || "#000000")
 
 
     return (
         <div style={{
 
-            borderColor : `${props.color}`
+            borderColor : `${nativeColor}`
 
-        }} className="h-full border-t-2 rounded-xl bg-[#1a1a1a] ">
+        }} className="h-full border-t-2 rounded-xl bg-[#1a1a1a] flex flex-col">
 
             <div className="flex flex-col py-4 px-6">
 
@@ -59,17 +82,17 @@ export default function DocCard (props : {
 
                                 <DropdownMenuGroup>
 
-                                    <DropdownMenuItem onClick={() => {}} className="font-rubik">
+                                    <DropdownMenuItem className="font-rubik">
 
                                         Rename
 
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="font-rubik">
+                                    <DropdownMenuItem onClick={() => handleDocDelete() } className="font-rubik">
 
                                         Delete
 
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="font-rubik">
+                                    <DropdownMenuItem onClick={() => router.push(`/chat/${props.docData.id}`)} className="font-rubik">
 
                                         Open Chat
 
@@ -134,20 +157,20 @@ export default function DocCard (props : {
             
             <button style={{
 
-                backgroundColor : `${props.color}1a`
+                backgroundColor : `${nativeColor}1a`
 
-            }} className="w-full flex justify-between py-4 items-center px-4 rounded-2xl cursor-pointer">
+            }} onClick={() => router.push(`/chat/${props.docData.id}`)} className="mt-auto w-full flex justify-between py-4 items-center px-4 rounded-2xl cursor-pointer">
 
                 <span style={{
 
-                    color : props.color
+                    color : nativeColor
 
                 }} className="font-space text-sm">
                     OPEN CHAT
                 </span>
 
                 <MoveRight style={{
-                    color : props.color
+                    color : nativeColor
                 }} />
 
             </button>

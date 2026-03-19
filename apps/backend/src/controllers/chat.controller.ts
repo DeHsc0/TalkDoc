@@ -134,6 +134,14 @@ async function chatDoc ( req : Request , res : Response ) {
 
         })
 
+        const insertChats = await db.insert(chats).values({
+
+            usersResponse : parsedData.data.searchQuery,
+            docId : parsedData.data.docId,
+            usersClerkId : userId,
+            aiResponse : parsedAiResponse.data.text, 
+        })
+
         const relevantDoc = results.find((e) => e.id === parsedAiResponse.data?.id)
         
         return res.status(200).json({
@@ -151,6 +159,7 @@ async function chatDoc ( req : Request , res : Response ) {
 
             success : false,
             message : "Internal Server Error",
+            err
         
         })
         
@@ -161,4 +170,76 @@ async function chatDoc ( req : Request , res : Response ) {
 
 }
 
-export { chatDoc }
+async function getChats (req : Request , res : Response ) {
+
+
+    const { userId } = getAuth(req)
+
+    if(!userId) return res.status(400).json({
+
+        success : false,
+        message : "Invalid User"
+
+    })
+
+    const { docId } = req.params
+
+    if(!docId)return res.status(400).json({
+
+        success : false,
+        message : "Invalid Input"
+
+    })
+
+    try{
+
+        const response = await db
+            .select({
+                doc : {
+
+                    id : docs.id,
+                    title : docs.title,
+                    pages : docs.pages,
+                    size : docs.size,
+                    description : docs.description,
+                    createdAt : docs.createdAt
+
+                },
+
+                chats : {
+
+                    id : chats.id,
+                    docId : chats.docId,
+                    aiResponse : chats.aiResponse,
+                    usersResponse : chats.usersResponse,
+                    createdAt : chats.createdAt
+
+                }
+            })
+            .from(docs)
+            .leftJoin(chats , eq(chats.docId, docs.id))
+            .where(eq( docs.id , docId))
+
+        return res.status(200).json({
+
+            success : true,
+            message : "Fetched doc chats successfully",
+            data : response
+
+        })
+
+    }
+    catch(e){
+
+        return res.status(500).json({
+
+            success : false,
+            message: "Failed to fetch chats"
+
+        })
+
+    }
+
+}
+
+export { chatDoc , getChats }

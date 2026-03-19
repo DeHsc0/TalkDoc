@@ -30,7 +30,7 @@ const chatSchema = z.object({
 
 const aiResSchema = z.object({
 
-    id : z.number(),
+    id : z.string(),
     text : z.string()
 
 }) 
