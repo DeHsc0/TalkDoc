@@ -32,7 +32,12 @@ const chatsSchema = z.object({
 
 })
 
-const chatsDataSchema = z.array(chatsSchema)
+const chatsDataSchema = z.object({
+
+    doc,
+    chats : z.array(chatsSchema)
+
+})
 
 
 export { docSchema , docCreationSchema , doc , chatsDataSchema}

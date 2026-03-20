@@ -35,22 +35,29 @@ export default function DocCard (props : {
 
     const handleDocDelete = async () => {
 
-        const response = await axios.delete(`http://localhost:3001/api/doc/${props.docData.id}` , {
+        try{
 
-            headers : {
-                Authorization : `Bearer ${ await getToken()}`
-            }
+            const response = await axios.delete(`http://localhost:3001/api/doc/${props.docData.id}` , {
+    
+                headers : {
+                    Authorization : `Bearer ${ await getToken()}`
+                }
+    
+            } )
+            
+            props.deleteDoc(props.docData.id)
+            
 
-        } )
+        }
+        catch(e){
 
-        if(response.status !== 200)return // alert
-        
-        props.deleteDoc(props.docData.id)
+            console.error("Failed to delete document :" , e) // alert
 
+        }
 
     }
 
-    const [nativeColor , setNativeColor] = useState<string>(colors[Math.floor(Math.random() * colors.length)] || "#000000")
+    const nativeColor = colors[Math.floor(Math.random() * colors.length)] || "#000000"
 
 
     return (

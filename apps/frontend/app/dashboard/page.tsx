@@ -74,7 +74,7 @@ export default function Dashboard () {
                             </ToggleGroupItem>
                         </ToggleGroup>
 
-                        <DocCreation addDoc={(item) => setDocData( [ ...docData, item ] )} />
+                        <DocCreation addDoc={(item) => setDocData( (prev) => [ ...prev , item ] )} />
                         
                     </div>
 
@@ -98,7 +98,7 @@ export default function Dashboard () {
 
                             docData.map((item) => {
 
-                                return <DocCard deleteDoc={(id: string) => setDocData(prev => prev.filter(item => item.id !== id))} key={docData.indexOf(item)} docData={item} />
+                                return <DocCard deleteDoc={(id: string) => setDocData(prev => prev.filter(doc => doc.id !== id))} key={item.id} docData={item} />
 
                             })
 

@@ -12,7 +12,7 @@ export default function ChatPage ( { params } : { params : Promise<{ docId : str
 
     const { getToken } = useAuth()
 
-    const [ chatData , setChatData ] = useState<z.infer<typeof chatsDataSchema >>([])
+    const [ chatData , setChatData ] = useState<z.infer<typeof chatsDataSchema > | undefined>()
 
     const [ loading , setLoading ] = useState<boolean>(false)
 
@@ -20,23 +20,34 @@ export default function ChatPage ( { params } : { params : Promise<{ docId : str
 
         setLoading(true)
 
-        const response = await axios.get(`http://localhost:3001/api/chats/${(await params).docId}` , {
+        try{
 
-            headers : {
-                Authorization : `Bearer ${await getToken()}`
-            }
+            const response = await axios.get(`http://localhost:3001/api/chats/${(await params).docId}` , {
 
-        } )
+                headers : {
+                    Authorization : `Bearer ${await getToken()}`
+                }
 
-        const parsedData = await chatsDataSchema.safeParse(response.data.data)
+            } )
 
-        if(!parsedData.success)return // alert
+            const parsedData = chatsDataSchema.safeParse(response.data.data)
 
-        setChatData(() => parsedData.data)
+            if(!parsedData.success)return // alert
 
-        setLoading(false)
 
-    }   
+            setChatData(() => parsedData.data)
+
+        } catch(e){
+
+            console.error("Unable to Fetch data: " , e) //alert
+
+        } finally{
+
+            setLoading(false)
+        }
+
+
+    }
 
     useEffect( () => {
 
@@ -46,13 +57,60 @@ export default function ChatPage ( { params } : { params : Promise<{ docId : str
      
     return (
 
-        loading ? <div className="flex w-screen h-screen justify-center items-center">
+        loading ? <div className="flex w-full h-full justify-center items-center">
 
             <Loader2Icon className="text-white animate-spin size-16"/>
 
-        </div> : <div>
+        </div> : <div className="flex w-full h-full">
 
-            <ChatSideBar/>
+            { chatData && <ChatSideBar docData={chatData.doc}/>}
+
+            <div className="flex-1 h-full ">
+
+                <div className=" border-b-2 flex justify-between px-12 py-4 items-center">
+
+                    <div className="bg-[#1a1a1a] py-2 px-3 flex gap-3 items-center rounded-lg">
+
+                        <div className="p-1 bg-[#CCFF3A] rounded-full">
+
+                        </div>                    
+
+                        <h1 className="font-rubik font-semibold text-xs text-white">
+                            {chatData?.doc.title}
+                        </h1>
+
+                        <p className="font-space text-[#666666] text-xs">{chatData?.doc.pages}p</p>
+
+                    </div>
+
+                    <div className="bg-[#CCFF3A]/12 px-3 py-2 rounded-md flex items-center gap-2 ">
+
+                        <div className="p-1 bg-[#CCFF3A] rounded-full animate-caret-blink">
+
+                        </div>
+
+                        <h1 className="text-xs font-space text-[#CCFF3A]">
+                            GEMINI 3 FlASH
+                        </h1>
+
+                    </div>
+
+                </div>
+
+                <div className="grid grid-rows-2 h-full" id="container">
+
+                    <div className="border border-red-800">
+
+                    </div>
+                    <div className="border border-red-800">
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
 
 
         </div>

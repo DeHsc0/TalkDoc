@@ -29,7 +29,12 @@ async function chatDoc ( req : Request , res : Response ) {
 
     try {
         
-        const doc = await db.select().from(docs).where(eq(docs.id , parsedData.data.docId.toString()))
+        const doc = await db.select().from(docs).where(
+            and(
+                eq(docs.id , parsedData.data.docId.toString()),
+                eq(docs.usersClerkId , userId )
+            )
+        )
 
         if(doc.length <= 0) return res.status(400).json({
 
@@ -218,13 +223,21 @@ async function getChats (req : Request , res : Response ) {
             })
             .from(docs)
             .leftJoin(chats , eq(chats.docId, docs.id))
-            .where(eq( docs.id , docId))
+            .where(and(eq( docs.id , docId) , eq( docs.usersClerkId , userId)))
+
+        const result = {
+
+            doc : response[0]?.doc,
+            chats: response.map(row => row.chats)
+
+        }
+        
 
         return res.status(200).json({
 
             success : true,
             message : "Fetched doc chats successfully",
-            data : response
+            data : result
 
         })
 

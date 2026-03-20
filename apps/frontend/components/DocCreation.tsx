@@ -29,28 +29,40 @@ export default function DocCreation ( props : { addDoc : (addedDocData : z.infer
 
         setLoading(true)
 
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("description", data.description || "");
-        formData.append("document", data.document);
-        
-        const response = await axios.post("http://localhost:3001/api/doc" , formData , {
-            headers : {
-                Authorization : `Bearer ${await getToken()}`
-            }
-        })
+        try{
 
-        if(response.status !== 200) return // alert
-        
-        const parsedData = doc.safeParse(response.data.data)
+            const formData = new FormData();
+            formData.append("name", data.name);
+            formData.append("description", data.description || "");
+            formData.append("document", data.document);
+            
+            const response = await axios.post("http://localhost:3001/api/doc" , formData , {
+                headers : {
+                    Authorization : `Bearer ${await getToken()}`
+                }
+            })
 
-        if(!parsedData.success)return // alert
+            if(response.status !== 200) return // alert
+            
+            const parsedData = doc.safeParse(response.data.data)
 
-        props.addDoc(parsedData.data)
-        
-        setLoading(false)
+            if(!parsedData.success)return // alert
 
-        setOpen(false)
+            props.addDoc(parsedData.data)
+
+        }
+        catch(e){
+
+            console.error("Failed to create document:" , e)
+ 
+        }
+
+        finally{
+
+            setLoading(false)
+            setOpen(false)
+
+        }
 
     }
 
@@ -136,7 +148,7 @@ export default function DocCreation ( props : { addDoc : (addedDocData : z.infer
                                 <div className="flex flex-col items-center">
 
                                     <h1 className="font-rubik">
-                                        { watch("document") ? watch("document").name  :"Attack a PDF"} 
+                                        { watch("document") ? watch("document").name  :"Attach a PDF"} 
                                     </h1>
                                     
                                     <span className="font-rubik text-sm text-[#666666]">
