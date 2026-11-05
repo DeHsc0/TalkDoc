@@ -1,4 +1,4 @@
-export type FileJobData =  {
+type FileJobData =  {
 
     filePath : string,
     title : string,
@@ -8,3 +8,14 @@ export type FileJobData =  {
     size : string
     
 }
+
+type IngestPastResData = {
+
+    searchQuery : string, 
+    conversationId : string, 
+    userId : string, 
+    aiResponse : string
+
+}
+
+export type { FileJobData , IngestPastResData }

@@ -20,12 +20,19 @@ export const docs = pgTable( "docs" , {
     createdAt: timestamp("createdAt").defaultNow().notNull()
 })
 
+export const conversations  = pgTable( "conversations" , {
+
+    id : uuid("id").primaryKey().defaultRandom().notNull(),
+    usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId).notNull(),
+    docId : uuid("docId").references(() => docs.id).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull()
+} )
 
 export const chats = pgTable( "chats" , {
 
     id : uuid("id").primaryKey().defaultRandom().notNull(),
     usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId).notNull(),
-    docId : uuid("docId").references(() => docs.id).notNull(),
+    conversationId : uuid("conversationId").references(() => conversations.id).notNull(),
     aiResponse :  varchar("aiResponse").notNull(),
     usersResponse : varchar("usersResponse" , { length : 256 }).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull()

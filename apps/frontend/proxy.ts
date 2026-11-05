@@ -1,7 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
 
-const isPublicRoute= createRouteMatcher(["/home"])
+const isPublicRoute= createRouteMatcher(["/"])
 
 export default clerkMiddleware( async (auth , req) => {
 
@@ -11,7 +11,7 @@ export default clerkMiddleware( async (auth , req) => {
 
         if(!userId) {
 
-            return NextResponse.redirect( new URL( "/home" , req.url ) )            
+            return NextResponse.redirect( new URL( "/" , req.url ) )            
 
         }
 

@@ -13,6 +13,8 @@
   "dependencies": {
     "@clerk/express": "^1.7.65",
     "@google/genai": "^1.43.0",
+    "@langchain/deepseek": "^1.1.21",
+    "@langchain/langgraph-checkpoint-redis": "^1.1.1",
     "@langchain/qdrant": "^1.0.1",
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
@@ -23,6 +25,7 @@
     "cors": "^2.8.6",
     "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",
+    "langchain": "^1.6.1",
     "multer": "^2.0.2",
     "svix": "^1.84.1",
     "zod": "^4.3.6"

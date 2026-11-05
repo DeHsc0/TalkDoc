@@ -61,11 +61,11 @@ export default function ChatPage ( { params } : { params : Promise<{ docId : str
 
             <Loader2Icon className="text-white animate-spin size-16"/>
 
-        </div> : <div className="flex w-full h-full">
+        </div> : <div className="flex w-full h-full ">
 
             { chatData && <ChatSideBar docData={chatData.doc}/>}
 
-            <div className="flex-1 h-full ">
+            <div className="flex-1 h-full flex flex-col">
 
                 <div className=" border-b-2 flex justify-between px-12 py-4 items-center">
 
@@ -97,12 +97,16 @@ export default function ChatPage ( { params } : { params : Promise<{ docId : str
 
                 </div>
 
-                <div className="grid grid-rows-2 h-full" id="container">
+                <div className="grid grid-rows-4 flex-1" id="container">
 
-                    <div className="border border-red-800">
+                    <div className="border border-red-800 row-span-3 scroll-auto">
+
+                        
 
                     </div>
                     <div className="border border-red-800">
+
+                                                
 
                     </div>
 

@@ -10,8 +10,6 @@ import { SignUpButton } from "@clerk/nextjs"
 gsap.registerPlugin(Observer)
 export default function Home() {
 
-  
-
   const navContainer = useRef<HTMLDivElement | null>(null)
 
   const boxContainer = useRef< HTMLDivElement | null>(null)

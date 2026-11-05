@@ -1,16 +1,16 @@
 import "dotenv/config"
 import { Worker } from "bullmq"
-import { connection } from "../config"
-import { embeddings, qdrantClient } from "@repo/config"
-import { FileJobData } from "../types/types"
+import { embeddings, qdrantClient , connection } from "@repo/config"
+import { FileJobData, IngestPastResData } from "../types/types"
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf"
 import { CharacterTextSplitter } from "@langchain/textsplitters"
 import { QdrantVectorStore } from "@langchain/qdrant"
 import { db } from "@repo/database"
-import { docs } from "@repo/database/schema"
+import { docs , chats } from "@repo/database/schema"
 import { unlink } from "fs"
+import { ingestPastResQueue } from ".."
 
-const worker = new Worker<FileJobData>("file-processing", async (job) => {
+const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
     
     const loader = new PDFLoader(job.data.filePath , {
         pdfjs: () => import("pdfjs-dist/legacy/build/pdf.js"),
@@ -44,7 +44,7 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
 
         const docsWithMeta = splitedDocs.map(doc => ({
             ...doc,
-            metadata: { ...doc.metadata, docId : docId }
+            metadata: { ...doc.metadata, docId : docId , userId : job.data.userId }
         }))
 
         const vectorStore = await QdrantVectorStore.fromExistingCollection(embeddings , {
@@ -72,5 +72,29 @@ const worker = new Worker<FileJobData>("file-processing", async (job) => {
 
 }, { connection })
 
-worker.on("completed", () => console.log("task done"))
-worker.on("failed" , (job , err) => console.error(`Job ${job && job.id} failed:${err}`) )
+fileWorker.on("completed", () => console.log("task done"))
+fileWorker.on("failed" , (job , err) => console.error(`Job ${job && job.id} failed:${err}`) )
+
+const ingestPastResWorker = new Worker<IngestPastResData>("ingest-past-res", async (job) => {
+    
+    try {
+        
+        const insertChats = await db.insert(chats).values({
+            
+            usersResponse : job.data.searchQuery,
+            conversationId : job.data.conversationId,
+            usersClerkId : job.data.userId,
+            aiResponse : job.data.aiResponse, 
+        })
+        
+    }
+    catch(err) {
+        
+        return {success : false , err}
+        
+    }
+    
+})
+
+ingestPastResWorker.on("completed", () => console.log("task done"))
+ingestPastResWorker.on("failed" , (job , err) => console.error(`Job ${job && job.id} failed:${err}`) )
