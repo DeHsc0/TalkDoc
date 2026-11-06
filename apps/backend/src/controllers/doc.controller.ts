@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { docCreationSchema } from "../types/zod";
 import path, { parse } from "path"
 import { db } from "@repo/database";
-import {  docs } from "@repo/database/schema";
+import {  docs , chats, conversations } from "@repo/database/schema";
 import {  and , eq } from "drizzle-orm";
 import { getAuth } from "@clerk/express";
 import { qdrantClient } from "@repo/config";
@@ -88,7 +88,7 @@ async function createDoc ( req : Request , res : Response) {
 
     })
 
-    const size = (parsedData.data.document.size / (1024 * 1024)).toFixed(2)
+    const size = Number((parsedData.data.document.size / (1024 * 1024)).toFixed(2))
     
     const data = await fileQueue.add("file", {
 
@@ -144,6 +144,20 @@ async function deleteDoc ( req : Request , res : Response) {
 
         success : false,
         message : "Invalid input"
+
+    })
+
+    const doc = await db.select().from(docs).where(
+        and(
+            eq(docs.id , docId),
+            eq(docs.usersClerkId , userId )
+        )
+    ).limit(1)
+
+    if(!doc[0]) return res.status(300).json({
+
+        success : false,
+        error : "Doc not found"
 
     })
 

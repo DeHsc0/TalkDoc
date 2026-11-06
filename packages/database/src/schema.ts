@@ -1,5 +1,5 @@
 
-import { integer, pgTable, timestamp, uuid, varchar  } from "drizzle-orm/pg-core";
+import { index, integer, pgTable, timestamp, uuid, varchar  } from "drizzle-orm/pg-core";
 
 export const users = pgTable('users', {
     id : uuid("id").primaryKey().defaultRandom().notNull(),
@@ -12,28 +12,35 @@ export const users = pgTable('users', {
 
 export const docs = pgTable( "docs" , {
     id : uuid("id").primaryKey().defaultRandom().notNull(),
-    usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId).notNull(),
+    usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId , { onDelete : "cascade"}).notNull(),
     title : varchar("title" , { length : 150 }).notNull(),
     description : varchar("description" , { length : 256 }),
     pages : integer("pages"),
-    size : varchar("size" , { length : 4 } ),
+    size : integer( "size" ),
     createdAt: timestamp("createdAt").defaultNow().notNull()
-})
+} , (table) => [ index("docs_users_clerk_id_idx").on(table.usersClerkId)])
 
 export const conversations  = pgTable( "conversations" , {
 
     id : uuid("id").primaryKey().defaultRandom().notNull(),
-    usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId).notNull(),
-    docId : uuid("docId").references(() => docs.id).notNull(),
+    usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId , { onDelete : "cascade"}).notNull(),
+    docId : uuid("docId").references(() => docs.id , { onDelete : "cascade"}).notNull(),
+    title : varchar("title" , { length : 150 }).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull()
-} )
+} , (table) => [
+  index("conversations_users_clerk_id_idx").on(table.usersClerkId),
+  index("conversations_doc_id_idx").on(table.docId),
+])
 
 export const chats = pgTable( "chats" , {
 
     id : uuid("id").primaryKey().defaultRandom().notNull(),
-    usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId).notNull(),
-    conversationId : uuid("conversationId").references(() => conversations.id).notNull(),
+    usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId , { onDelete : "cascade"}).notNull(),
+    conversationId : uuid("conversationId").references(() => conversations.id , { onDelete : "cascade"}).notNull(),
     aiResponse :  varchar("aiResponse").notNull(),
-    usersResponse : varchar("usersResponse" , { length : 256 }).notNull(),
+    usersResponse : varchar("usersResponse" , { length : 600 }).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull()
-} )
+} , (table) => [
+  index("chats_users_clerk_id_idx").on(table.usersClerkId),
+  index("chats_conversation_id_idx").on(table.conversationId),
+])

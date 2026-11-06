@@ -97,10 +97,10 @@ const agent = createAgent({
                     }
                 }`,
   tools: [ retrieveContext ],
-  checkpointer: await RedisSaver.fromUrl(process.env.REDIS_URL || ""),
+  checkpointer: await RedisSaver.fromUrl(process.env.REDIS_URL || "" , { defaultTTL : 3600 } ),
   responseFormat : aiResponseSchema,
   contextSchema
 })
 
 
-export { aiResponseSchema , agent  }
+export { aiResponseSchema , agent , model }

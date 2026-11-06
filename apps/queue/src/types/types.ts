@@ -5,7 +5,7 @@ type FileJobData =  {
     originalName : string,
     userId : string,
     description : string | undefined,
-    size : string
+    size : number 
     
 }
 

@@ -4,8 +4,8 @@ import { uploads } from "../middlewares/uploads"
 
 const docRouter : Router = Router()
 
-docRouter.post("/" , uploads.single("document") , createDoc )
+docRouter.post( "/" , uploads.single("document") , createDoc )
 docRouter.get( "/" , getDocs )
-docRouter.delete("/:docId" , deleteDoc)
+docRouter.delete( "/:docId" , deleteDoc)
 
 export default docRouter

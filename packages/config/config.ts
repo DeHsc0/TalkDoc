@@ -3,11 +3,14 @@ import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai"
 import { QdrantClient } from "@qdrant/js-client-rest"
 import Redis from "ioredis";
 
+function getConnection () {
+  const connection = new Redis( process.env.REDIS_URL || "", {
+          maxRetriesPerRequest : null
+      } 
+  )
+  return connection 
 
-const connection = new Redis( process.env.REDIS_URL || "", {
-        maxRetriesPerRequest : null
-    } 
-)
+}
 
 const embeddings = new GoogleGenerativeAIEmbeddings({
   model: "gemini-embedding-001",
@@ -16,9 +19,9 @@ const embeddings = new GoogleGenerativeAIEmbeddings({
 
 const qdrantClient = new QdrantClient({
   url : process.env.QDRANT_URL,
-  port : 443,
+  port : Number(process.env.QDRANT_PORT) || 6333,
   apiKey : process.env.QDRANT_API,
   checkCompatibility : false
 })
 
-export { embeddings , qdrantClient , connection }
+export { embeddings , qdrantClient , getConnection }

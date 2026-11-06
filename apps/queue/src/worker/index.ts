@@ -1,6 +1,6 @@
 import "dotenv/config"
 import { Worker } from "bullmq"
-import { embeddings, qdrantClient , connection } from "@repo/config"
+import { embeddings, qdrantClient , getConnection } from "@repo/config"
 import { FileJobData, IngestPastResData } from "../types/types"
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf"
 import { CharacterTextSplitter } from "@langchain/textsplitters"
@@ -58,7 +58,7 @@ const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
     }
     catch (error) {
 
-        return { success : false , error}
+        throw new Error(JSON.stringify(error))
     
     } finally {
 
@@ -70,7 +70,7 @@ const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
     
     }
 
-}, { connection })
+}, { connection : getConnection() })
 
 fileWorker.on("completed", () => console.log("task done"))
 fileWorker.on("failed" , (job , err) => console.error(`Job ${job && job.id} failed:${err}`) )
@@ -86,15 +86,17 @@ const ingestPastResWorker = new Worker<IngestPastResData>("ingest-past-res", asy
             usersClerkId : job.data.userId,
             aiResponse : job.data.aiResponse, 
         })
+
+        return { "success" : true }
         
     }
     catch(err) {
         
-        return {success : false , err}
+        throw new Error(JSON.stringify(err))
         
     }
     
-})
+} ,{ connection : getConnection() })
 
 ingestPastResWorker.on("completed", () => console.log("task done"))
 ingestPastResWorker.on("failed" , (job , err) => console.error(`Job ${job && job.id} failed:${err}`) )

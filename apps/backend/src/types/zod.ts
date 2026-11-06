@@ -3,7 +3,7 @@ import z from "zod";
 
 const fileSchema = z.object({
 
-    fieldname : z.string().max(8),
+    fieldname : z.string().max(20),
     originalname : z.string().max(200),
     encoding : z.string(),
     mimetype: z.enum(['image/jpeg', 'image/png', 'application/pdf']),
@@ -15,7 +15,7 @@ const fileSchema = z.object({
 
 const docCreationSchema = z.object({
 
-    name : z.string().max(200),
+    name : z.string().max(150),
     document : fileSchema,
     description : z.string().optional()
     
