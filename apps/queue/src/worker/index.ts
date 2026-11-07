@@ -9,10 +9,17 @@ import { db } from "@repo/database"
 import { docs , chats } from "@repo/database/schema"
 import { unlink } from "fs"
 import { ingestPastResQueue } from ".."
+import { uploadFile } from "../helper"
 
 const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
+
+    const fileBuffer = Buffer.from(job.data.fileBase64 , "base64")
+
+    const pdfBlob = new Blob([Uint8Array.from(fileBuffer)], {
+        type: "application/pdf",
+    })
     
-    const loader = new PDFLoader(job.data.filePath , {
+    const loader = new PDFLoader( pdfBlob , {
         pdfjs: () => import("pdfjs-dist/legacy/build/pdf.js"),
         splitPages : true
     })
@@ -24,6 +31,8 @@ const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
         const splitedDocs = await splitter.splitDocuments(doc)
 
         const totalPages : number = splitedDocs[splitedDocs.length - 1]?.metadata.pdf.totalPages
+
+        const filePubUrl = await uploadFile( job.data.originalName , fileBuffer )
         
         const response = await db.insert(docs).values({
 
@@ -31,7 +40,8 @@ const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
             title : job.data.title,
             description : job.data.description,
             pages : totalPages,
-            size : job.data.size
+            size : job.data.size.toFixed(2),
+            url : filePubUrl
             
         }).returning()
 
@@ -57,23 +67,11 @@ const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
 
     }
     catch (error) {
-
-        throw new Error(JSON.stringify(error))
-    
-    } finally {
-
-        unlink(job.data.filePath , (err) => {
-
-            if (err) return console.error(`Failed to delete file ${job.data.filePath}: ` , err)
-                
-        })
-    
+        console.error("File worker failed:", error);
+        throw error instanceof Error ? error : new Error(String(error));
     }
 
 }, { connection : getConnection() })
-
-fileWorker.on("completed", () => console.log("task done"))
-fileWorker.on("failed" , (job , err) => console.error(`Job ${job && job.id} failed:${err}`) )
 
 const ingestPastResWorker = new Worker<IngestPastResData>("ingest-past-res", async (job) => {
     
@@ -98,5 +96,3 @@ const ingestPastResWorker = new Worker<IngestPastResData>("ingest-past-res", asy
     
 } ,{ connection : getConnection() })
 
-ingestPastResWorker.on("completed", () => console.log("task done"))
-ingestPastResWorker.on("failed" , (job , err) => console.error(`Job ${job && job.id} failed:${err}`) )

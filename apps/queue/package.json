@@ -7,7 +7,7 @@
     "dev:worker": "pnpm run build && tsx watch src/worker/index.ts",
     "start:worker": "node dist/worker/index.js",
     "build": "tsc -b",
-    "dev": " pnpm run build && node dist"
+    "dev": " pnpm run dev:worker && node dist "
   },
   "type": "module",
   "keywords": [],
@@ -31,6 +31,8 @@
     "@repo/typescript-config": "workspace:*",
     "bullmq": "^5.69.2",
     "ioredis": "5.9.2",
+    "oci-common": "^2.145.0",
+    "oci-objectstorage": "^2.145.0",
     "pdf-parse": "^2.4.5",
     "pdfjs-dist": "^2.16.105"
   }

@@ -5,36 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1769602398689,
-      "tag": "0000_smiling_surge",
+      "when": 1794054440405,
+      "tag": "0000_silent_logan",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1769695584337,
-      "tag": "0001_silly_unus",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1772253931813,
-      "tag": "0002_striped_lady_mastermind",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1773928314377,
-      "tag": "0003_chemical_cardiac",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1793978456599,
-      "tag": "0004_illegal_hydra",
+      "when": 1794057278962,
+      "tag": "0001_closed_sue_storm",
       "breakpoints": true
     }
   ]

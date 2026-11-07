@@ -6,7 +6,7 @@ const fileSchema = z.object({
     fieldname : z.string().max(20),
     originalname : z.string().max(200),
     encoding : z.string(),
-    mimetype: z.enum(['image/jpeg', 'image/png', 'application/pdf']),
+    mimetype: z.enum([ 'application/pdf']),
     buffer : z.instanceof(Buffer).optional(),
     size : z.number().positive().max(10 * 1024 * 1024),
     path: z.string().optional()

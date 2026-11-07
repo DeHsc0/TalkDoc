@@ -1,17 +1,3 @@
-
-import { SidebarProvider } from "../../components/ui/sidebar"
-
-
-
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <SidebarProvider>
-      
-      <main className={`flex w-full`}>
-    
-        {children}
-      </main>
-    
-    </SidebarProvider>
-  )
+  return <div className="flex min-h-svh w-full bg-background">{children}</div>
 }

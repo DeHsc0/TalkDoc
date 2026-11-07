@@ -1,12 +1,12 @@
 type FileJobData =  {
 
-    filePath : string,
+    fileBase64 : string,
+    fileBuffer : Buffer,
     title : string,
     originalName : string,
     userId : string,
     description : string | undefined,
     size : number 
-    
 }
 
 type IngestPastResData = {

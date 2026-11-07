@@ -12,7 +12,7 @@ async function getDocs (req : Request , res : Response ) {
 
     const { userId } = getAuth(req)
 
-    if(!userId)return res.status(400).json({
+    if(!userId)return res.status(401).json({
 
         success : false,
         error  : "Missing userId"
@@ -59,7 +59,7 @@ async function createDoc ( req : Request , res : Response) {
 
     const { userId } = getAuth(req)
 
-    if(!userId)return res.status(400).json({
+    if(!userId)return res.status(401).json({
 
         success : false,
         error  : "Missing userId"
@@ -92,7 +92,8 @@ async function createDoc ( req : Request , res : Response) {
     
     const data = await fileQueue.add("file", {
 
-        filePath : path.resolve(req.file.path),
+        fileBuffer : req.file.buffer,
+        fileBase64 : req.file.buffer.toString("base64"),
         originalName : parsedData.data.document.originalname,
         userId ,
         description : parsedData.data.description, 
@@ -110,7 +111,7 @@ async function createDoc ( req : Request , res : Response) {
         size: string | null;
     } 
 
-    } = await data.waitUntilFinished(fileQueueEvents)  
+    } = await data.waitUntilFinished(fileQueueEvents, 120_000)  
 
     if(!job.success)return res.status(400).json({
 
@@ -133,7 +134,7 @@ async function deleteDoc ( req : Request , res : Response) {
 
     const { userId } = getAuth(req)
 
-    if(!userId)return res.status(301).json({
+    if(!userId)return res.status(401).json({
 
         success : false,
         message : "UnAuthorized"
@@ -154,7 +155,7 @@ async function deleteDoc ( req : Request , res : Response) {
         )
     ).limit(1)
 
-    if(!doc[0]) return res.status(300).json({
+    if(!doc[0]) return res.status(404).json({
 
         success : false,
         error : "Doc not found"

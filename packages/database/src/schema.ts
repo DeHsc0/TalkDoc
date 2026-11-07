@@ -1,5 +1,5 @@
 
-import { index, integer, pgTable, timestamp, uuid, varchar  } from "drizzle-orm/pg-core";
+import { index, integer, pgTable, timestamp, uuid, varchar, decimal } from "drizzle-orm/pg-core";
 
 export const users = pgTable('users', {
     id : uuid("id").primaryKey().defaultRandom().notNull(),
@@ -15,8 +15,9 @@ export const docs = pgTable( "docs" , {
     usersClerkId : varchar("usersClerkId", { length: 256 }).references(() => users.clerkId , { onDelete : "cascade"}).notNull(),
     title : varchar("title" , { length : 150 }).notNull(),
     description : varchar("description" , { length : 256 }),
+    url : varchar("url" , {length : 500}),
     pages : integer("pages"),
-    size : integer( "size" ),
+    size : decimal( "size" ),
     createdAt: timestamp("createdAt").defaultNow().notNull()
 } , (table) => [ index("docs_users_clerk_id_idx").on(table.usersClerkId)])
 

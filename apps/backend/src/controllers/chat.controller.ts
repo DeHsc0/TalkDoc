@@ -5,7 +5,7 @@ import { and, desc, eq } from "drizzle-orm"
 import { db } from "@repo/database"
 import { ingestPastResQueue } from "@repo/queue"
 import { getConnection } from "@repo/config"
-import { aiResponseSchema , agent , model } from "../config/ai"
+import {  getAgent , model } from "../config/ai"
 import { getAuth } from "@clerk/express"
 import { SystemMessage , HumanMessage } from "langchain"
 import { RedisSaver } from "@langchain/langgraph-checkpoint-redis"
@@ -17,21 +17,21 @@ async function chatDoc ( req : Request , res : Response ) {
 
     const { userId } = getAuth(req)
 
-    if(!userId)return res.end({
+    if(!userId)return res.status(401).end(JSON.stringify({
 
         success : false, 
         message : "UnAuthorized"
 
-    })
+    }))
 
     const parsedData = chatSchema.safeParse(req.body)
 
-    if( !parsedData.success )return res.end({
+    if( !parsedData.success )return res.status(400).end(JSON.stringify({
 
         success : false,
         error : "Invalid input"
 
-    })
+    }))
 
     try {
 
@@ -54,7 +54,7 @@ async function chatDoc ( req : Request , res : Response ) {
                 )
             ).limit(1)
     
-            if(!doc[0]) return res.end(JSON.stringify({
+            if(!doc[0]) return res.status(404).end(JSON.stringify({
     
                 success : false,
                 error : "Doc not found"
@@ -126,7 +126,7 @@ async function chatDoc ( req : Request , res : Response ) {
                 
                 catch(error){
                     
-                    return res.end(JSON.stringify({
+                    return res.status(500).end(JSON.stringify({
     
                         success : false,
                         message : "Unable to create a conversation"
@@ -156,6 +156,8 @@ async function chatDoc ( req : Request , res : Response ) {
         
         }
 
+        const agent = await getAgent()
+
         const events = await agent.streamEvents({ messages : [{ role : "user" , content : `
                 
             pastMessages : ${JSON.stringify({ data : pastResponses})},
@@ -167,9 +169,9 @@ async function chatDoc ( req : Request , res : Response ) {
 
         for await (const message of events.messages) {
 
-            res.write(JSON.stringify({ data : { toolCalls : await message.toolCall } }))
+            res.write(JSON.stringify({ data : { toolCalls : await message.toolCalls } }))
 
-            agentOutput = await message.output 
+            agentOutput = (await message.output).content
 
             for await (const delta of message.text) {
                 
@@ -186,7 +188,7 @@ async function chatDoc ( req : Request , res : Response ) {
                 searchQuery : parsedData.data.searchQuery,
                 conversationId : conversationId || "",
                 userId,
-                aiResponse : agentOutput 
+                aiResponse : agentOutput as string
             
             })
 
@@ -198,7 +200,7 @@ async function chatDoc ( req : Request , res : Response ) {
 
         console.error("Original DB error:", err)
 
-        return res.end(JSON.stringify({
+        return res.status(500).end(JSON.stringify({
 
             success : false,
             message : "Internal Server Error",
@@ -216,7 +218,7 @@ async function getChats (req : Request , res : Response ) {
 
     const { userId } = getAuth(req)
 
-    if(!userId) return res.status(400).json({
+    if(!userId) return res.status(401).json({
 
         success : false,
         message : "Invalid User"
@@ -257,7 +259,7 @@ async function getChats (req : Request , res : Response ) {
         ))
         .limit(1)
 
-        if (!doc[0]) return res.status(200).json({
+        if (!doc[0]) return res.status(404).json({
 
             success : false,
             message : "Document dosent exists."

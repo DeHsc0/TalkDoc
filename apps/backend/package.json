@@ -13,6 +13,7 @@
   "dependencies": {
     "@clerk/express": "^1.7.65",
     "@google/genai": "^1.43.0",
+    "@langchain/core": "^1.3.4",
     "@langchain/deepseek": "^1.1.21",
     "@langchain/langgraph-checkpoint-redis": "^1.1.1",
     "@langchain/qdrant": "^1.0.1",
@@ -22,6 +23,7 @@
     "@repo/typescript-config": "workspace:*",
     "@types/cors": "^2.8.19",
     "@types/multer": "^2.0.0",
+    "busboy": "^1.6.0",
     "cors": "^2.8.6",
     "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",

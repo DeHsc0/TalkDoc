@@ -8,7 +8,7 @@ async function getConversations (req : Request , res : Response ) {
 
     const { userId } = getAuth(req)
 
-    if(!userId)return res.status(400).json({
+    if(!userId)return res.status(401).json({
 
         success : false,
         error  : "Missing userId"
@@ -17,20 +17,30 @@ async function getConversations (req : Request , res : Response ) {
 
     try {
 
-        const {docId , conversationId } = req.params
-    
+        const {docId } = req.params
+   
+        if (!docId)return res.status(400).json({
+
+            success : false, 
+            message : "Missing Params"
+        })
+        
         const doc = await db.select({
     
             id : docs.id,
             title : docs.title,
+            url : docs.url,
             description : docs.description,
             pages : docs.pages,
             size : docs.size,
             createdAt : docs.createdAt
     
-        }).from(docs).where(eq(docs.usersClerkId , userId))
+        }).from(docs).where( and(
+            eq(docs.usersClerkId , userId), 
+            eq( docs.id , docId )
+        ))
     
-        if (!doc[0]) return res.status(301).json({
+        if (!doc[0]) return res.status(404).json({
     
             success : false, 
             message : "Document dosent exists."
@@ -42,7 +52,7 @@ async function getConversations (req : Request , res : Response ) {
         return res.status(200).json({
     
             success : true,
-            data : convos
+            data : { convos , doc }
     
         })
 

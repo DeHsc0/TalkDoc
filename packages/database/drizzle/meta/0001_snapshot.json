@@ -1,9 +1,221 @@
 {
-  "id": "572cb469-2bb5-4861-8a6e-7bfd225829c5",
-  "prevId": "1cb41a28-7491-411c-a55a-23ed15112dba",
+  "id": "f1434fb5-ed56-4ea1-ab08-56d55ba4db51",
+  "prevId": "f5b209f3-573c-4bec-8c79-8c834ec838cb",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.chats": {
+      "name": "chats",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "usersClerkId": {
+          "name": "usersClerkId",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "conversationId": {
+          "name": "conversationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aiResponse": {
+          "name": "aiResponse",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "usersResponse": {
+          "name": "usersResponse",
+          "type": "varchar(600)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "chats_users_clerk_id_idx": {
+          "name": "chats_users_clerk_id_idx",
+          "columns": [
+            {
+              "expression": "usersClerkId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "chats_conversation_id_idx": {
+          "name": "chats_conversation_id_idx",
+          "columns": [
+            {
+              "expression": "conversationId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chats_usersClerkId_users_clerkId_fk": {
+          "name": "chats_usersClerkId_users_clerkId_fk",
+          "tableFrom": "chats",
+          "tableTo": "users",
+          "columnsFrom": [
+            "usersClerkId"
+          ],
+          "columnsTo": [
+            "clerkId"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "chats_conversationId_conversations_id_fk": {
+          "name": "chats_conversationId_conversations_id_fk",
+          "tableFrom": "chats",
+          "tableTo": "conversations",
+          "columnsFrom": [
+            "conversationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.conversations": {
+      "name": "conversations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "usersClerkId": {
+          "name": "usersClerkId",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "docId": {
+          "name": "docId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "conversations_users_clerk_id_idx": {
+          "name": "conversations_users_clerk_id_idx",
+          "columns": [
+            {
+              "expression": "usersClerkId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "conversations_doc_id_idx": {
+          "name": "conversations_doc_id_idx",
+          "columns": [
+            {
+              "expression": "docId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "conversations_usersClerkId_users_clerkId_fk": {
+          "name": "conversations_usersClerkId_users_clerkId_fk",
+          "tableFrom": "conversations",
+          "tableTo": "users",
+          "columnsFrom": [
+            "usersClerkId"
+          ],
+          "columnsTo": [
+            "clerkId"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "conversations_docId_docs_id_fk": {
+          "name": "conversations_docId_docs_id_fk",
+          "tableFrom": "conversations",
+          "tableTo": "docs",
+          "columnsFrom": [
+            "docId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.docs": {
       "name": "docs",
       "schema": "",
@@ -21,8 +233,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "docName": {
-          "name": "docName",
+        "title": {
+          "name": "title",
           "type": "varchar(150)",
           "primaryKey": false,
           "notNull": true
@@ -31,17 +243,51 @@
           "name": "description",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
-        "created_at": {
-          "name": "created_at",
+        "url": {
+          "name": "url",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pages": {
+          "name": "pages",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "size": {
+          "name": "size",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "docs_users_clerk_id_idx": {
+          "name": "docs_users_clerk_id_idx",
+          "columns": [
+            {
+              "expression": "usersClerkId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "docs_usersClerkId_users_clerkId_fk": {
           "name": "docs_usersClerkId_users_clerkId_fk",
@@ -53,20 +299,12 @@
           "columnsTo": [
             "clerkId"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "docs_docName_unique": {
-          "name": "docs_docName_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "docName"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -88,8 +326,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "username": {
-          "name": "username",
+        "userName": {
+          "name": "userName",
           "type": "varchar(256)",
           "primaryKey": false,
           "notNull": true
@@ -100,15 +338,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "created_at": {
-          "name": "created_at",
+        "createdAt": {
+          "name": "createdAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
         },
-        "updated_at": {
-          "name": "updated_at",
+        "updatedAt": {
+          "name": "updatedAt",
           "type": "timestamp with time zone",
           "primaryKey": false,
           "notNull": true,
@@ -126,11 +364,11 @@
             "clerkId"
           ]
         },
-        "users_username_unique": {
-          "name": "users_username_unique",
+        "users_userName_unique": {
+          "name": "users_userName_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "username"
+            "userName"
           ]
         },
         "users_email_unique": {

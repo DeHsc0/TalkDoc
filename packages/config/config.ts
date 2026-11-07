@@ -20,7 +20,7 @@ const embeddings = new GoogleGenerativeAIEmbeddings({
 const qdrantClient = new QdrantClient({
   url : process.env.QDRANT_URL,
   port : Number(process.env.QDRANT_PORT) || 6333,
-  apiKey : process.env.QDRANT_API,
+  apiKey : process.env.QDRANT_API_KEY,
   checkCompatibility : false
 })
 

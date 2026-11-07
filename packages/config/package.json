@@ -28,6 +28,8 @@
     "@langchain/google-genai": "^2.1.20",
     "@qdrant/js-client-rest": "^1.17.0",
     "@repo/typescript-config": "workspace:*",
-    "ioredis": "5.9.2"
+    "ioredis": "5.9.2",
+    "oci-common": "^2.145.0",
+    "oci-objectstorage": "^2.145.0"
   }
 }
