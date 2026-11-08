@@ -151,6 +151,22 @@
   .hairline {
     border-color: oklch(0.94 0.012 85 / 0.1);
   }
+  /* pdfjs v5 text layer: base geometry comes from the official
+     pdfjs-dist/web/pdf_viewer.css (imported by PdfCanvasViewer).
+     Only the TalkDoc overrides live here. */
+  /* Clicked citation: highlighted spans over the canvas */
+  .textLayer .citation-highlight {
+    background: oklch(0.78 0.13 70 / 0.4);
+    border-radius: 2px;
+    box-shadow: 0 0 0 2px oklch(0.78 0.13 70 / 0.25);
+  }
+}
+
+/* Unlayered so it out-specifies the imported pdf_viewer.css selection color
+   (its rules are unlayered and would win over @layer utilities). */
+.textLayer span::selection,
+.textLayer br::selection {
+  background: oklch(0.78 0.13 70 / 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {

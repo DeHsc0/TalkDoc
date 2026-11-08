@@ -55,8 +55,8 @@ const chatsDataSchema = z.object({
 /** Conversation entry as returned by GET /api/conversations/:docId. */
 const conversation = z.object({
   conversation: z.object({
-    // The backend list endpoint currently returns only a title; the id is
-    // optional until the backend includes it.
+    // Included by the backend; optional keeps the parser tolerant of older
+    // responses where only the title was returned.
     id: z.string().optional(),
     title: z.string(),
   }),

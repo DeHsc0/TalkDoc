@@ -4,7 +4,7 @@ import { QdrantClient } from "@qdrant/js-client-rest"
 import Redis from "ioredis";
 
 function getConnection () {
-  const connection = new Redis( process.env.REDIS_URL || "", {
+  const connection = new Redis( process.env.REDIS_URL ? `${process.env.REDIS_URL}/2` : "", {
           maxRetriesPerRequest : null
       } 
   )

@@ -4,7 +4,6 @@ import axios from "axios"
 import {
   chatHistorySchemaResponse,
   conversationSchemaResponse,
-  docSchemaResponse,
 } from "../types/zod"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api"
@@ -78,9 +77,42 @@ export async function fetchConversations(
   }
 }
 
+export interface ChatHistoryMessage {
+  id: string
+  user: string
+  assistant: string
+  createdAt: string
+  references: { pageNumber: number; pageContent: string }[]
+}
+
 export interface ChatHistory {
   docTitle: string | null
-  messages: { id: string; user: string; assistant: string; createdAt: string }[]
+  messages: ChatHistoryMessage[]
+}
+
+/** History rows store the assistant payload as a JSON string of
+ * { result, references } (new) or plain text (older rows). */
+function parseStoredAssistant(raw: string): { text: string; references: { pageNumber: number; pageContent: string }[] } {
+  if (raw.startsWith("{")) {
+    try {
+      const parsed = JSON.parse(raw) as { result?: unknown; references?: unknown }
+      if (typeof parsed.result === "string") {
+        const references = Array.isArray(parsed.references)
+          ? parsed.references.filter(
+              (entry): entry is { pageNumber: number; pageContent: string } =>
+                typeof entry === "object" &&
+                entry !== null &&
+                typeof (entry as { pageNumber: unknown }).pageNumber === "number" &&
+                typeof (entry as { pageContent: unknown }).pageContent === "string"
+            )
+          : []
+        return { text: parsed.result, references }
+      }
+    } catch {
+      // Fall through to plain text.
+    }
+  }
+  return { text: raw, references: [] }
 }
 
 /** Chat history for one conversation. Returns newest-first rows mapped to
@@ -104,12 +136,16 @@ export async function fetchChatHistory(
     const chronological = [...rows].reverse()
     return {
       docTitle: parsed.data.data.doc[0]?.doc.title ?? null,
-      messages: chronological.map((row) => ({
-        id: row.id,
-        user: row.usersResponse,
-        assistant: row.aiResponse,
-        createdAt: row.createdAt,
-      })),
+      messages: chronological.map((row) => {
+        const stored = parseStoredAssistant(row.aiResponse)
+        return {
+          id: row.id,
+          user: row.usersResponse,
+          assistant: stored.text,
+          createdAt: row.createdAt,
+          references: stored.references,
+        }
+      }),
     }
   } catch (error) {
     throw toApiError(error, "Could not load this conversation.")
@@ -124,24 +160,4 @@ export interface DocumentSummary {
   size?: number | string | null
   createdAt: string
   url?: string | null
-}
-
-/** Loads the user's documents and picks the one being chatted with. */
-export async function fetchDocument(
-  getToken: () => Promise<string | null>,
-  docId: string
-): Promise<DocumentSummary | null> {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/doc`, {
-      headers: await authHeaders(getToken),
-    })
-    const parsed = docSchemaResponse.safeParse(response.data)
-    if (!parsed.success) {
-      throw new ChatApiError("The document could not be read.")
-    }
-    const found = parsed.data.response.find((entry) => entry.id === docId)
-    return found ? { ...found, url: null } : null
-  } catch (error) {
-    throw toApiError(error, "Could not load this document.")
-  }
 }

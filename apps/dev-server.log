@@ -1,0 +1,16 @@
+⚠ You are using a non-standard "NODE_ENV" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.46.68.70:3000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 6.8s
+○ Compiling / ...
+ GET /?pdfdev=1 200 in 5.8s (compile: 4.3s, proxy.ts: 388ms, render: 1093ms)
+ GET /?pdfdev=1 200 in 179ms (compile: 15ms, proxy.ts: 34ms, render: 130ms)
+✓ Compiled in 278ms
+ GET /?pdfdev=1 200 in 158ms (compile: 22ms, proxy.ts: 23ms, render: 113ms)
+ GET /chats/344cc1a7-a275-4123-9fb7-b329b4bf584a?conversationId=c77b394f-dd81-48e1-9260-2afe715c2d04 200 in 11.4s (compile: 8.1s, proxy.ts: 2.3s, render: 997ms)
+ GET /chats/344cc1a7-a275-4123-9fb7-b329b4bf584a?conversationId=c77b394f-dd81-48e1-9260-2afe715c2d04 200 in 270ms (compile: 49ms, proxy.ts: 32ms, render: 189ms)
+[?25h

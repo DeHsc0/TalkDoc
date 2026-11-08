@@ -47,7 +47,7 @@ async function getConversations (req : Request , res : Response ) {
     
         })
     
-        const convos = await db.select({ conversation : { title : conversations.title }}).from(conversations).where(and( eq( conversations.docId , doc[0].id ) , eq( conversations.usersClerkId , userId ) ))
+        const convos = await db.select({ conversation : { id : conversations.id , title : conversations.title }}).from(conversations).where(and( eq( conversations.docId , doc[0].id ) , eq( conversations.usersClerkId , userId ) ))
     
         return res.status(200).json({
     

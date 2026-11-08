@@ -163,37 +163,24 @@ async function chatDoc ( req : Request , res : Response ) {
             pastMessages : ${JSON.stringify({ data : pastResponses})},
             userQuery : ${parsedData.data.searchQuery}
 
-        `}]}, { version : "v3" , context : { docId , userId}})
+        `}] }, { version : "v3" , context : { docId , userId} , configurable : { thread_id : conversationId}})
 
-        let agentOutput
+        const agentOutput = (await events.output).structuredResponse
 
-        for await (const message of events.messages) {
-
-            res.write(JSON.stringify({ data : { toolCalls : await message.toolCalls } }))
-
-            agentOutput = (await message.output).content
-
-            for await (const delta of message.text) {
-                
-                res.write(JSON.stringify({ data : { agentRes : delta }}));
-                
-            }
-                
-        }
+        res.write(JSON.stringify({
+            data: {
+                agentRes: JSON.stringify(agentOutput),
+            },
+        }))
         
-        if (agentOutput) {
+        ingestPastResQueue.add( "past-res" , {
 
-            ingestPastResQueue.add( "past-res" , {
-    
-                searchQuery : parsedData.data.searchQuery,
-                conversationId : conversationId || "",
-                userId,
-                aiResponse : agentOutput as string
-            
-            })
-
-        }
-    
+            searchQuery : parsedData.data.searchQuery,
+            conversationId : conversationId || "",
+            userId,
+            aiResponse : JSON.stringify(agentOutput)
+        
+        })    
     
     }
     catch(err) {

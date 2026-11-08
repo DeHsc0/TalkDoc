@@ -6,9 +6,10 @@
  * Verified backend protocol (apps/backend/src/controllers/chat.controller.ts):
  * - Content-Type: text/plain, Transfer-Encoding: chunked
  * - The server writes raw JSON objects back to back with NO delimiter:
- *     {"data":{"toolCalls":[…]}}{"data":{"agentRes":"delta"}}…
- * - There is no completion marker; completion is signaled by the connection
- *   closing.
+ *     {"data":{"agentRes":"…"}}…
+ * - The run's structured payload ({ result, references }) arrives as ONE
+ *   agentRes event whose value is a JSON string; that event is the completion
+ *   signal — the backend never ends the response itself.
  * - Errors arrive as a regular (non-chunked) JSON body with 4xx/5xx status.
  */
 
@@ -81,8 +82,19 @@ export class ConcatenatedJsonParser {
   }
 }
 
+export interface CitationReference {
+  pageNumber: number
+  pageContent: string
+}
+
+export interface AgentResult {
+  result: string
+  references: CitationReference[]
+}
+
 export interface ChatStreamEvent {
   toolCalls?: unknown
+  /** New protocol: a JSON string of { result, references }. */
   agentRes?: string
   /** Hook point: the backend does not currently emit this (integration blocker). */
   conversationId?: string
@@ -99,8 +111,35 @@ export interface SendMessageInput {
 
 export interface SendMessageHandlers {
   onTextDelta: (delta: string) => void
+  /** Fires when a structured { result, references } payload is parsed. */
+  onResult: (payload: AgentResult) => void
   onToolActivity: () => void
   onConversationId: (conversationId: string) => void
+}
+
+/**
+ * Parses the agent's structured payload. The backend serializes
+ * `{ result, references }` to a string inside the agentRes field.
+ * Returns null when the payload is a legacy plain-text delta.
+ */
+export function parseAgentResult(raw: string): AgentResult | null {
+  if (!raw.startsWith("{")) return null
+  try {
+    const parsed = JSON.parse(raw) as { result?: unknown; references?: unknown }
+    if (typeof parsed.result !== "string") return null
+    const references = Array.isArray(parsed.references)
+      ? parsed.references.filter(
+          (entry): entry is CitationReference =>
+            typeof entry === "object" &&
+            entry !== null &&
+            typeof (entry as CitationReference).pageNumber === "number" &&
+            typeof (entry as CitationReference).pageContent === "string"
+        )
+      : []
+    return { result: parsed.result, references }
+  } catch {
+    return null
+  }
 }
 
 /**
@@ -171,6 +210,18 @@ export async function streamChatMessage(
         const data = typed?.data
         if (!data) continue
         if (typeof data.agentRes === "string" && data.agentRes.length > 0) {
+          // The backend may send either the structured payload
+          // (JSON.stringify of { result, references }) or legacy plain-text
+          // deltas. Detect which and route accordingly.
+          const structured = parseAgentResult(data.agentRes)
+          if (structured) {
+            handlers.onResult(structured)
+            // The structured payload is the completion signal — the backend
+            // does not end the response, so stop reading and release the
+            // connection instead of waiting for a close that never comes.
+            await reader.cancel()
+            return
+          }
           handlers.onTextDelta(data.agentRes)
         }
         if (data.toolCalls !== undefined) {

@@ -7,16 +7,16 @@ import {
   ChatApiError,
   fetchChatHistory,
   fetchConversations,
-  fetchDocument,
   type ConversationEntry,
   type DocumentSummary,
 } from "./chatApi"
-import { ChatStreamError, streamChatMessage } from "./chatStream"
+import { ChatStreamError, streamChatMessage, type CitationReference } from "./chatStream"
 
 export interface ChatMessage {
   id: string
   role: "user" | "assistant"
   content: string
+  references?: CitationReference[]
 }
 
 export type ChatStatus = "loading-document" | "ready" | "error"
@@ -125,25 +125,26 @@ export function useChat(docId: string) {
   // URL is the navigation reference for an existing conversation.
   const urlConversationId = searchParams.get("conversationId")
 
-  // Load the document, then its conversation list.
+  // Load the conversation list — it also carries the document row itself,
+  // so no separate documents request is needed in the chat interface.
   useEffect(() => {
     let cancelled = false
-    let mounted = true
 
     async function load() {
       setStatus("loading-document")
       setStatusError(null)
       try {
-        const doc = await fetchDocument(() => getTokenRef.current(), docId)
+        const result = await fetchConversations(() => getTokenRef.current(), docId)
         if (cancelled) return
-        if (!doc) {
+        if (!result.doc) {
           setStatus("error")
           setStatusError("This document does not exist in your collection.")
           return
         }
-        setDocument(doc)
+        setDocument(result.doc)
+        setConversations(result.conversations)
+        setConversationsError(null)
         setStatus("ready")
-        if (mounted) void refreshConversations()
       } catch (error) {
         if (cancelled) return
         setStatus("error")
@@ -158,9 +159,7 @@ export function useChat(docId: string) {
     void load()
     return () => {
       cancelled = true
-      mounted = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [docId])
 
   const refreshConversations = useCallback(async () => {
@@ -194,7 +193,12 @@ export function useChat(docId: string) {
         setMessages(
           history.messages.flatMap((row) => [
             { id: `${row.id}-u`, role: "user" as const, content: row.user },
-            { id: `${row.id}-a`, role: "assistant" as const, content: row.assistant },
+            {
+              id: `${row.id}-a`,
+              role: "assistant" as const,
+              content: row.assistant,
+              references: row.references,
+            },
           ])
         )
       } catch (error) {
@@ -274,8 +278,13 @@ export function useChat(docId: string) {
       abortRef.current = controller
 
       let sawToolActivity = false
-      let receivedId: string | null = null
       startTypewriter(assistantId)
+
+      // The backend does not emit the new conversation's id in the stream;
+      // it is discovered afterwards by diffing the refreshed list.
+      const knownConversationIds = new Set(
+        conversations.flatMap((entry) => (entry.id ? [entry.id] : []))
+      )
 
       try {
         await streamChatMessage(
@@ -291,13 +300,22 @@ export function useChat(docId: string) {
               setToolActive(false)
               streamTextRef.current += delta
             },
+            onResult: ({ result, references }) => {
+              setToolActive(false)
+              // The structured payload replaces the running reveal buffer;
+              // the typewriter loop animates its contents in.
+              streamTextRef.current = result
+              setMessages((previous) =>
+                previous.map((message) =>
+                  message.id === assistantId ? { ...message, references } : message
+                )
+              )
+            },
             onToolActivity: () => {
               sawToolActivity = true
               setToolActive(true)
             },
             onConversationId: (id) => {
-              // The backend does not currently emit this event.
-              receivedId = id
               setActiveConversationId(id)
             },
           },
@@ -308,9 +326,18 @@ export function useChat(docId: string) {
         flushTypewriter()
         stopTypewriterLoop()
 
-        if (receivedId) {
-          router.replace(`/chats/${docId}?conversationId=${receivedId}`, { scroll: false })
-          void refreshConversations()
+        // The backend never ends the response nor emits the conversation id,
+        // so the fresh id (first message of a new conversation) is picked up
+        // from the refreshed list: it is the entry that was not there before.
+        const refreshed = await refreshConversations()
+        const freshConversation = refreshed?.conversations.find(
+          (entry) => entry.id && !knownConversationIds.has(entry.id)
+        )
+        if (freshConversation?.id) {
+          setActiveConversationId(freshConversation.id)
+          router.replace(`/chats/${docId}?conversationId=${freshConversation.id}`, {
+            scroll: false,
+          })
         }
       } catch (error) {
         flushTypewriter()
@@ -337,6 +364,7 @@ export function useChat(docId: string) {
     },
     [
       activeConversationId,
+      conversations,
       docId,
       flushTypewriter,
       refreshConversations,
@@ -352,11 +380,27 @@ export function useChat(docId: string) {
     abortRef.current?.abort()
   }, [])
 
+  /**
+   * Resolves a [n] citation to its reference. Citations are 1-based:
+   * references[index - 1]. Returns null when the reference is missing or
+   * has no usable page number — callers degrade gracefully.
+   */
+  const resolveCitation = useCallback(
+    (message: ChatMessage, citationIndex: number): { pageNumber: number; pageContent: string } | null => {
+      const reference = message.references?.[citationIndex - 1]
+      if (!reference || typeof reference.pageNumber !== "number" || !reference.pageContent) {
+        return null
+      }
+      return { pageNumber: reference.pageNumber, pageContent: reference.pageContent }
+    },
+    []
+  )
+
   const suggestedQuestions = useMemo(
     () => [
-      "Summarize this document in a few bullet points",
-      "What are the key takeaways?",
-      "Explain the main sections in simple terms",
+      "What specific requirements or rules does this document define?",
+      "Which exact dates, numbers, and names does it mention, and on which pages?",
+      "What precisely does the first page say this document is about?",
     ],
     []
   )
@@ -380,5 +424,6 @@ export function useChat(docId: string) {
     startNewConversation,
     sendMessage,
     stopStreaming,
+    resolveCitation,
   }
 }

@@ -10,11 +10,16 @@ import { useEffect, useState } from "react"
 import PdfCanvasViewer from "./PdfCanvasViewer"
 
 const HARDCODED_PDF_URL =
-  "https://objectstorage.ap-mumbai-1.oraclecloud.com/n/bm4hg5dyczco/b/bucket-20261107-1539/o/2310.08560v2.pdf"
+  "https://objectstorage.ap-mumbai-1.oraclecloud.com/n/bm4hg5dyczco/b/bucket-20261107-1539/o/2310.08560v2%20(1).pdf"
 
 export default function PdfDevHarness() {
   const [blobUrl, setBlobUrl] = useState<string | null>(null)
   const [failed, setFailed] = useState(false)
+  const [highlight, setHighlight] = useState<{
+    pageNumber: number
+    content: string
+    nonce: number
+  } | null>(null)
 
   useEffect(() => {
     let created: string | null = null
@@ -39,9 +44,24 @@ export default function PdfDevHarness() {
         <p className="font-space text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
           TalkDoc · PDF viewer dev harness
         </p>
-        <p className="font-space text-[10px] tracking-wider text-muted-foreground/60 uppercase">
-          temporary route
-        </p>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="rounded border border-border px-2 py-1 font-space text-[10px] text-muted-foreground uppercase hover:text-ivory"
+            onClick={() =>
+              setHighlight({
+                pageNumber: 1,
+                content: "Large language models (LLMs) have revolutionized AI, but are constrained by a limited context window.",
+                nonce: Date.now(),
+              })
+            }
+          >
+            Test citation jump
+          </button>
+          <p className="font-space text-[10px] tracking-wider text-muted-foreground/60 uppercase">
+            temporary route
+          </p>
+        </div>
       </header>
       {failed ? (
         <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
@@ -51,7 +71,11 @@ export default function PdfDevHarness() {
         <div className="flex min-h-0 flex-1">
           {blobUrl ? (
             <div className="flex min-h-0 w-full flex-1">
-              <PdfCanvasViewer blobUrl={blobUrl} title="2310.08560v2" />
+              <PdfCanvasViewer
+          blobUrl={blobUrl}
+          title="2310.08560v2"
+          highlight={highlight}
+        />
             </div>
           ) : (
             <div className="flex flex-1 items-center justify-center font-space text-[10px] tracking-[0.25em] text-muted-foreground uppercase">

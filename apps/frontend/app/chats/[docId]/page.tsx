@@ -1,6 +1,7 @@
 "use client"
 
-import { Suspense, useCallback, useEffect, useRef, useSyncExternalStore } from "react"
+import { Suspense, useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react"
+import { toast } from "sonner"
 import Link from "next/link"
 import { useParams } from "next/navigation"
 import { MessageSquarePlus, PanelLeftOpen, Sparkles, TriangleAlert, User } from "lucide-react"
@@ -10,7 +11,8 @@ import ChatSideBar, { HistoryLoading } from "../../../components/chat/ChatSideBa
 import DocumentViewer from "../../../components/chat/DocumentViewer"
 import MessageList from "../../../components/chat/MessageList"
 import MessageComposer from "../../../components/chat/MessageComposer"
-import { useChat } from "../../../lib/useChat"
+import type { PdfHighlight } from "../../../components/chat/PdfCanvasViewer"
+import { useChat, type ChatMessage } from "../../../lib/useChat"
 
 function ChatHeader({
   docTitle,
@@ -150,6 +152,7 @@ function ChatWorkspace({ docId }: { docId: string }) {
     window.addEventListener("pointermove", onMove)
     window.addEventListener("pointerup", onUp)
   }, [])
+  const [pdfHighlight, setPdfHighlight] = useState<PdfHighlight | null>(null)
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const stickToBottomRef = useRef(true)
 
@@ -159,6 +162,22 @@ function ChatWorkspace({ docId }: { docId: string }) {
     if (!container || !stickToBottomRef.current) return
     container.scrollTop = container.scrollHeight
   }, [chat.messages, chat.toolActive])
+
+  const handleCitation = useCallback(
+    (message: ChatMessage, citationIndex: number) => {
+      const target = chat.resolveCitation(message, citationIndex)
+      if (!target) {
+        toast.error(`Reference ${citationIndex} is not available for this answer.`)
+        return
+      }
+      setPdfHighlight({
+        pageNumber: target.pageNumber,
+        content: target.pageContent,
+        nonce: Date.now(),
+      })
+    },
+    [chat]
+  )
 
   const handleScroll = () => {
     const container = scrollRef.current
@@ -201,7 +220,7 @@ function ChatWorkspace({ docId }: { docId: string }) {
           style={{ width: `${splitPercent}%` }}
         >
           {chat.document ? (
-            <DocumentViewer doc={chat.document} />
+            <DocumentViewer doc={chat.document} highlight={pdfHighlight} />
           ) : chat.status === "loading-document" ? (
             <div className="flex h-full flex-col gap-3 p-6" aria-hidden="true">
               <Skeleton className="h-10 w-2/3" />
@@ -271,6 +290,7 @@ function ChatWorkspace({ docId }: { docId: string }) {
                       messages={chat.messages}
                       streaming={chat.streaming}
                       toolActive={chat.toolActive}
+                      onCitation={handleCitation}
                     />
                   )}
                 </div>

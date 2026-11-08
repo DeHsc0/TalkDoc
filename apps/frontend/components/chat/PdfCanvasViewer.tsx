@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import type { PDFDocumentProxy } from "pdfjs-dist"
+import "pdfjs-dist/web/pdf_viewer.css"
 import {
   ChevronsLeft,
   ChevronsRight,
@@ -26,7 +27,7 @@ import { Button } from "../ui/button"
  */
 
 const pdfjs = () => import("pdfjs-dist")
-const WORKER_SRC = "/pdf.worker.min.mjs"
+const WORKER_SRC = "/pdf.worker.min.js"
 
 type RenderTask = { cancel: () => void; promise: Promise<unknown> }
 interface PageSize {
@@ -34,22 +35,30 @@ interface PageSize {
   height: number
 }
 
+export interface PdfHighlight {
+  pageNumber: number
+  content: string
+  /** Changes on every request so repeat jumps retrigger. */
+  nonce: number
+}
+
 export default function PdfCanvasViewer({
   blobUrl,
   title,
+  highlight,
 }: {
   blobUrl: string
   title: string
+  highlight?: PdfHighlight | null
 }) {
+  const highlightRef = useRef<HTMLElement[]>([])
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const pageRefs = useRef<Map<number, HTMLDivElement>>(new Map())
   const thumbRefs = useRef<Map<number, HTMLButtonElement>>(new Map())
   const renderTasksRef = useRef<Map<string, RenderTask>>(new Map())
   const docRef = useRef<PDFDocumentProxy | null>(null)
-  const pageSizesRef = useRef<Map<number, PageSize>>(new Map())
   const renderedMainRef = useRef<Set<number>>(new Set())
   const renderedThumbRef = useRef<Set<number>>(new Set())
-  const zoomRef = useRef(1)
 
   const [pageCount, setPageCount] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
@@ -58,8 +67,8 @@ export default function PdfCanvasViewer({
   const [phase, setPhase] = useState<"loading" | "measuring" | "ready">("loading")
   const [showThumbs, setShowThumbs] = useState(true)
   const [renderedPages, setRenderedPages] = useState<Set<number>>(new Set())
-
-  zoomRef.current = zoom
+  const [pageSizes, setPageSizes] = useState<Map<number, PageSize>>(new Map())
+  const [fitWidth, setFitWidth] = useState<number | null>(null)
 
   /** Renders one page into a target container at a CSS width. */
   const rasterize = useCallback(
@@ -73,7 +82,7 @@ export default function PdfCanvasViewer({
         renderTasksRef.current.delete(cacheKey)
       }
 
-      const size = pageSizesRef.current.get(pageNumber)
+      const size = pageSizes.get(pageNumber)
       const scaleFactor = cssWidth / (size?.width ?? cssWidth)
       const dpr = window.devicePixelRatio || 1
       const scale = scaleFactor * dpr
@@ -95,15 +104,39 @@ export default function PdfCanvasViewer({
       renderTasksRef.current.set(cacheKey, task)
       try {
         await task.promise
-        if (renderTasksRef.current.get(cacheKey) === task) {
-          renderTasksRef.current.delete(cacheKey)
-          setRenderedPages((previous) => new Set(previous).add(pageNumber))
-        }
       } catch {
         // Cancelled renders reject; whatever is on the canvas stays.
       }
+
+      // Selectable text layer on top of the canvas (pdfjs TextLayer).
+      const cssScale = cssWidth / (size?.width ?? cssWidth)
+      let textDiv = target.querySelector<HTMLDivElement>(".textLayer")
+      if (textDiv) textDiv.remove()
+      textDiv = document.createElement("div")
+      textDiv.className = "textLayer"
+      target.appendChild(textDiv)
+      // pdfjs v5 lays out every text span with calc(var(--total-scale-factor) * Npx):
+      // without this variable span boxes get browser-default sizes and text
+      // selection highlights render half-height.
+      target.style.setProperty("--total-scale-factor", String(cssScale))
+      try {
+        const { TextLayer } = await pdfjs()
+        const layer = new TextLayer({
+          textContentSource: page.streamTextContent(),
+          container: textDiv,
+          viewport: page.getViewport({ scale: cssScale }),
+        })
+        await layer.render()
+      } catch {
+        // Text selection is a progressive enhancement; ignore failures.
+      }
+
+      if (renderTasksRef.current.get(cacheKey) === task) {
+        renderTasksRef.current.delete(cacheKey)
+        setRenderedPages((previous) => new Set(previous).add(pageNumber))
+      }
     },
-    []
+    [pageSizes]
   )
 
   /** Renders a main-view page at the current zoom (fit-width base). */
@@ -112,9 +145,9 @@ export default function PdfCanvasViewer({
       const container = pageRefs.current.get(pageNumber)
       if (!container) return
       const fitWidth = (scrollRef.current?.clientWidth ?? 600) - 32
-      void rasterize(pageNumber, container, Math.max(240, fitWidth * zoomRef.current), `main-${pageNumber}`)
+      void rasterize(pageNumber, container, Math.max(240, fitWidth * zoom), `main-${pageNumber}`)
     },
-    [rasterize]
+    [rasterize, zoom]
   )
 
   /** Renders a thumbnail at a fixed small width. */
@@ -142,7 +175,6 @@ export default function PdfCanvasViewer({
       setRenderedPages(new Set())
       mainRendered.clear()
       thumbRendered.clear()
-      pageSizesRef.current.clear()
       try {
         const lib = await pdfjs()
         lib.GlobalWorkerOptions.workerSrc = WORKER_SRC
@@ -154,19 +186,27 @@ export default function PdfCanvasViewer({
         docRef.current = doc
         setPageCount(doc.numPages)
         setPhase("measuring")
+        const sizes = new Map<number, PageSize>()
         for (let pageNumber = 1; pageNumber <= doc.numPages; pageNumber++) {
           const page = await doc.getPage(pageNumber)
           if (cancelled) return
           const viewport = page.getViewport({ scale: 1 })
-          pageSizesRef.current.set(pageNumber, {
+          sizes.set(pageNumber, {
             width: viewport.width,
             height: viewport.height,
           })
         }
         if (cancelled) return
+        setPageSizes(sizes)
         setPhase("ready")
-      } catch {
-        if (!cancelled) setError("The PDF could not be rendered in this browser.")
+      } catch (loadError) {
+        if (!cancelled) {
+          setError(
+            loadError instanceof Error
+              ? `The PDF could not be rendered: ${loadError.message}`
+              : "The PDF could not be rendered in this browser."
+          )
+        }
       }
     }
 
@@ -184,6 +224,15 @@ export default function PdfCanvasViewer({
       }
     }
   }, [blobUrl])
+
+  // Track the page column width so zoom math never touches refs in render.
+  useEffect(() => {
+    const measure = () => setFitWidth((scrollRef.current?.clientWidth ?? 600) - 32)
+    measure()
+    const onResize = () => measure()
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [phase, showThumbs])
 
   // Lazy render + current-page tracking for the main view.
   useEffect(() => {
@@ -256,6 +305,98 @@ export default function PdfCanvasViewer({
     [pageCount]
   )
 
+  /** Clears the previous citation highlight. */
+  const clearHighlight = useCallback(() => {
+    highlightRef.current.forEach((element) => element.classList.remove("citation-highlight"))
+    highlightRef.current = []
+  }, [])
+
+  /**
+   * Navigates to the highlight's page and marks the text-layer spans that
+   * match the cited content. Retries briefly while the page's text layer
+   * finishes rendering. Falls back to plain navigation when the text cannot
+   * be located.
+   */
+  useEffect(() => {
+    if (!highlight || phase !== "ready" || pageCount === 0) return
+    clearHighlight()
+    goToPage(highlight.pageNumber)
+
+    let attempts = 0
+    let timer: ReturnType<typeof setTimeout> | null = null
+
+    const attempt = () => {
+      attempts++
+      const container = pageRefs.current.get(highlight.pageNumber)
+      const textLayer = container?.querySelector(":scope > .textLayer")
+      if (!textLayer) {
+        if (attempts < 12) timer = setTimeout(attempt, 120)
+        return
+      }
+      const spans = [...textLayer.querySelectorAll("span")]
+      if (spans.length === 0) {
+        if (attempts < 12) timer = setTimeout(attempt, 120)
+        return
+      }
+
+      // Whitespace- and hyphen-insensitive comparison: span boundaries in the
+      // text layer do not align with the snippet's word spacing, and PDFs
+      // hyphenate across line breaks ("revolution-ized"). Removing both keeps
+      // character indices consistent on both sides.
+      const compact = (value: string) =>
+        value
+          .replace(/\s+/g, "")
+          .replace(/[\u00AD-]/g, "")
+          .toLowerCase()
+      const target = compact(highlight.content).slice(0, 140)
+      let combined = ""
+      const spanRanges: { element: HTMLElement; start: number; end: number }[] = []
+      for (const span of spans) {
+        const text = compact(span.textContent ?? "")
+        spanRanges.push({ element: span, start: combined.length, end: combined.length + text.length })
+        combined += text
+      }
+
+      let matchStart = combined.indexOf(target)
+      if (matchStart === -1 && target.length > 60) {
+        matchStart = combined.indexOf(target.slice(0, 60))
+      }
+      if (matchStart === -1) {
+        // Text not found on this page (truncation differences): navigation
+        // alone is the graceful fallback.
+        return
+      }
+      const matchEnd = matchStart + target.length
+      // Highlight spans fully inside the match, plus edge spans whose
+      // majority lies within it. Whole-span coloring is the finest available
+      // granularity, so "any overlap" would bleed the highlight into
+      // neighboring lines.
+      const hits = spanRanges.filter((range) => {
+        if (range.start >= matchStart && range.end <= matchEnd) return true
+        const overlap = Math.min(range.end, matchEnd) - Math.max(range.start, matchStart)
+        return overlap > 0 && overlap / (range.end - range.start) >= 0.5
+      })
+      hits.forEach((range) => range.element.classList.add("citation-highlight"))
+      highlightRef.current = hits.map((range) => range.element)
+    }
+
+    attempt()
+    // A manual text selection means the user moved on: retire the citation
+    // highlight so it never competes with their own selection.
+    const onSelectionChange = () => {
+      const selection = document.getSelection()
+      if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
+        clearHighlight()
+      }
+    }
+    document.addEventListener("selectionchange", onSelectionChange)
+    return () => {
+      if (timer) clearTimeout(timer)
+      document.removeEventListener("selectionchange", onSelectionChange)
+      clearHighlight()
+    }
+  }, [highlight, phase, pageCount, clearHighlight, goToPage])
+
   const setZoomClamped = useCallback((next: number) => {
     setZoom(Math.min(4, Math.max(0.25, Number(next.toFixed(2)))))
   }, [])
@@ -276,16 +417,16 @@ export default function PdfCanvasViewer({
         goToPage(pageCount)
       } else if (event.key === "+" || event.key === "=") {
         event.preventDefault()
-        setZoomClamped(zoomRef.current + 0.25)
+        setZoomClamped(zoom + 0.25)
       } else if (event.key === "-") {
         event.preventDefault()
-        setZoomClamped(zoomRef.current - 0.25)
+        setZoomClamped(zoom - 0.25)
       } else if (event.key === "0") {
         event.preventDefault()
         setZoomClamped(1)
       }
     },
-    [goToPage, pageCount, setZoomClamped]
+    [currentPage, goToPage, pageCount, setZoomClamped, zoom]
   )
 
   if (error) {
@@ -436,7 +577,7 @@ export default function PdfCanvasViewer({
           >
             <div className="flex flex-col gap-2">
               {Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => {
-                const size = pageSizesRef.current.get(page)
+                const size = pageSizes.get(page)
                 const ratio = size ? size.height / size.width : 1.414
                 return (
                   <button
@@ -450,7 +591,7 @@ export default function PdfCanvasViewer({
                     onClick={() => goToPage(page)}
                     aria-label={`Go to page ${page}`}
                     aria-current={page === currentPage ? "true" : undefined}
-                    className={`block w-full overflow-hidden rounded-sm border transition-colors ${
+                    className={`relative block w-full overflow-hidden rounded-sm border transition-colors ${
                       page === currentPage
                         ? "border-amber-signal/60"
                         : "border-border hover:border-muted-foreground/40"
@@ -496,9 +637,9 @@ export default function PdfCanvasViewer({
           ) : (
             <div className="flex flex-col items-center gap-5">
               {Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => {
-                const size = pageSizesRef.current.get(page)
+                const size = pageSizes.get(page)
                 const ratio = size ? size.height / size.width : 1.414
-                const width = Math.max(240, (scrollRef.current?.clientWidth ?? 600) - 32) * zoom
+                const width = Math.max(240, (fitWidth ?? 600) - 32) * zoom
                 return (
                   <div
                     key={page}

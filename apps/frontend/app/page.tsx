@@ -6,6 +6,7 @@ import Benefits from "../components/landing/Benefits";
 import FinalCta from "../components/landing/FinalCta";
 import Footer from "../components/landing/Footer";
 import PdfDevHarness from "../components/chat/PdfDevHarness";
+import Dashboard from "./dashboard/page";
 
 export default async function Home({
   searchParams,
@@ -15,6 +16,9 @@ export default async function Home({
   const params = await searchParams;
   if (params.pdfdev === "1") {
     return <PdfDevHarness />;
+  }
+  if (params.dashdev === "1") {
+    return <Dashboard />;
   }
 
   return (

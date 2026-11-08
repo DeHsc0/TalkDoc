@@ -3,7 +3,7 @@
 import { FileText, Loader2, TriangleAlert } from "lucide-react"
 import { useEffect, useState } from "react"
 import type { DocumentSummary } from "../../lib/chatApi"
-import PdfCanvasViewer from "./PdfCanvasViewer"
+import PdfCanvasViewer, { type PdfHighlight } from "./PdfCanvasViewer"
 
 type PdfState =
   | { status: "idle"; url: null; error: null }
@@ -18,7 +18,13 @@ type PdfState =
  * handed to the custom pdfjs viewer (verified in Chromium). Falls back to a
  * metadata panel when the document has no URL or the fetch fails.
  */
-export default function DocumentViewer({ doc }: { doc: DocumentSummary | null }) {
+export default function DocumentViewer({
+  doc,
+  highlight,
+}: {
+  doc: DocumentSummary | null
+  highlight?: PdfHighlight | null
+}) {
   const sourceUrl = doc?.url ?? null
 
   const [pdfState, setPdfState] = useState<PdfState>(
@@ -89,7 +95,7 @@ export default function DocumentViewer({ doc }: { doc: DocumentSummary | null })
           </p>
         </div>
       ) : pdfState.status === "ready" ? (
-        <PdfCanvasViewer blobUrl={pdfState.url} title={doc.title} />
+        <PdfCanvasViewer blobUrl={pdfState.url} title={doc.title} highlight={highlight} />
       ) : pdfState.status === "error" ? (
         <div
           role="alert"
