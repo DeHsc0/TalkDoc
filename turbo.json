@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "ui": "tui",
+  "ui": "stream",
   "globalEnv" : [
     "PORT",
     "NEXT_PUBLIC_API_URL",
@@ -28,9 +28,10 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**" , "dist/**"]
     },
     "start": {
+      "dependsOn": ["^build"],
       "cache": true,
       "persistent": true
     },

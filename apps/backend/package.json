@@ -4,7 +4,7 @@
   "main": "dist/app.js",
   "scripts": {
     "build": "tsc -b",
-    "start": "pnpm run build && node dist/app.js",
+    "start": "pnpm run build && tsx dist/app.js",
     "dev": "tsx src/app.ts"
   },
   "keywords": [],

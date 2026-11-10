@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "",
   "exports": {
-    ".": "./src/index.js",
-    "./schema": "./src/schema.js"
+    ".": "./dist/src/index.js",
+    "./schema": "./dist/src/schema.js"
   },
   "scripts": {
     "db:generate": "drizzle-kit generate",
