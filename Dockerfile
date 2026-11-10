@@ -3,7 +3,8 @@ FROM node:22-alpine
 WORKDIR ./app
 
 COPY package.json ./
-COPY package-lock.json ./
+COPY pnpm-lock.json ./
+COPY pnpm-workspace.json ./
 
 COPY apps/backend/package.json ./apps/backend/package.json
 
@@ -15,7 +16,7 @@ COPY packages/config/package.json ./packages/config/package.json
 
 COPY packages/database/package.json ./packages/database/package.json
 
-RUN pnpm install 
+RUN npm install -g pnpm && pnpm install 
 
 COPY . . 
 
