@@ -28,16 +28,16 @@ importers:
         version: 1.43.0(@modelcontextprotocol/sdk@1.27.1(@cfworker/json-schema@4.1.6)(zod@4.3.6))(bufferutil@4.1.0)
       '@langchain/core':
         specifier: ^1.3.4
-        version: 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+        version: 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       '@langchain/deepseek':
         specifier: ^1.1.21
-        version: 1.1.21(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))
+        version: 1.1.21(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))
       '@langchain/langgraph-checkpoint-redis':
         specifier: ^1.1.1
-        version: 1.1.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(@langchain/langgraph-checkpoint@1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))))
+        version: 1.1.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(@langchain/langgraph-checkpoint@1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))))
       '@langchain/qdrant':
-        specifier: ^1.0.1
-        version: 1.0.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(typescript@5.9.3)
+        specifier: ^1.0.3
+        version: 1.0.3(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(typescript@5.9.3)
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -70,7 +70,7 @@ importers:
         version: 5.2.1
       langchain:
         specifier: ^1.6.1
-        version: 1.6.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(ws@8.18.3(bufferutil@4.1.0))
+        version: 1.6.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(ws@8.18.3(bufferutil@4.1.0))
       multer:
         specifier: ^2.0.2
         version: 2.0.2
@@ -210,16 +210,16 @@ importers:
     dependencies:
       '@langchain/community':
         specifier: ^1.1.19
-        version: 1.1.19(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.58.2)(bufferutil@4.1.0)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(zod@4.3.6))(@ibm-cloud/watsonx-ai@1.7.8)(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(@neondatabase/serverless@0.9.5)(@vercel/postgres@0.10.0)(google-auth-library@10.6.1)(ibm-cloud-sdk-core@5.4.7)(ignore@7.0.5)(ioredis@5.9.2)(jsonwebtoken@9.0.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(pdf-parse@2.4.5)(pg@8.16.3)(playwright@1.58.2)(ws@8.18.3(bufferutil@4.1.0))
+        version: 1.1.19(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.58.2)(bufferutil@4.1.0)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(zod@4.3.6))(@ibm-cloud/watsonx-ai@1.7.8)(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(@neondatabase/serverless@0.9.5)(@vercel/postgres@0.10.0)(google-auth-library@10.6.1)(ibm-cloud-sdk-core@5.4.7)(ignore@7.0.5)(ioredis@5.9.2)(jsonwebtoken@9.0.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(pdf-parse@2.4.5)(pg@8.16.3)(playwright@1.58.2)(ws@8.18.3(bufferutil@4.1.0))
       '@langchain/core':
-        specifier: ^1.1.28
-        version: 1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
+        specifier: ^1.3.4
+        version: 1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       '@langchain/qdrant':
-        specifier: ^1.0.1
-        version: 1.0.1(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(typescript@5.9.3)
+        specifier: ^1.0.3
+        version: 1.0.3(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(typescript@5.9.3)
       '@langchain/textsplitters':
         specifier: ^1.0.1
-        version: 1.0.1(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))
+        version: 1.0.1(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -271,7 +271,7 @@ importers:
     dependencies:
       '@langchain/google-genai':
         specifier: ^2.1.20
-        version: 2.1.20(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
+        version: 2.1.20(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
       '@qdrant/js-client-rest':
         specifier: ^1.20.0
         version: 1.20.0(typescript@5.9.3)
@@ -556,9 +556,6 @@ packages:
       dotenv: ^16.4.5
       openai: ^4.62.1
       zod: ^3.23.8
-
-  '@cfworker/json-schema@4.1.1':
-    resolution: {integrity: sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og==}
 
   '@cfworker/json-schema@4.1.6':
     resolution: {integrity: sha512-YzVGTHXf4bzlyAL5KAvHYCdNbbt6zM5cYkAgxqxQPDQM6aZ4ShIIN5yJ+6q7YeonnevxT8k/LmD2tJi/jOiKkg==}
@@ -1780,8 +1777,8 @@ packages:
       youtubei.js:
         optional: true
 
-  '@langchain/core@1.1.28':
-    resolution: {integrity: sha512-6FAGdezEp8zHY92LtnsAiv54KaG41nBdsuukk+R+1484edV20cVOyIc36ANuGKPx0pmYFCBWhCUdO0jxB/zn2Q==}
+  '@langchain/core@1.3.4':
+    resolution: {integrity: sha512-4LnkVpxOzA4BuMPuAQKDDf4SujSzd4WahKk51eyUJzSEsQjyGpbyAgDRWPYr3wzgtAJ59UXewemsyIxRKTXFrA==}
     engines: {node: '>=20'}
 
   '@langchain/core@1.3.5':
@@ -1847,11 +1844,11 @@ packages:
   '@langchain/protocol@0.0.20':
     resolution: {integrity: sha512-sxlkDG2/HGyjDFLTJ8B/o3oglRjOv8iLCFgrV0550/Vym3V6RZ0SUjAQFe8jrLQw8ZXjERy3swJp5OODBSrUYA==}
 
-  '@langchain/qdrant@1.0.1':
-    resolution: {integrity: sha512-y3QK+KXgA++ZXAE9ofKjT5u6yh4FQqTF5CpdWIynKV2Zz926SSFq3ELbPhvMfUGu61Ils7p6jd1DIbXpZNAkgQ==}
+  '@langchain/qdrant@1.0.3':
+    resolution: {integrity: sha512-b8EqhGpltjUvFfzk+NM03jfB20+HAWKylQU+k68BUkIvaW38F7cLoz90cJWWHrg9Ritv+bL5y2hchDm365z7bA==}
     engines: {node: '>=20'}
     peerDependencies:
-      '@langchain/core': ^1.0.0
+      '@langchain/core': ^1.1.47
 
   '@langchain/textsplitters@1.0.1':
     resolution: {integrity: sha512-rheJlB01iVtrOUzttscutRgLybPH9qR79EyzBEbf1u97ljWyuxQfCwIWK+SjoQTM9O8M7GGLLRBSYE26Jmcoww==}
@@ -2105,12 +2102,6 @@ packages:
 
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
-
-  '@qdrant/js-client-rest@1.17.0':
-    resolution: {integrity: sha512-aZFQeirWVqWAa1a8vJ957LMzcXkFHGbsoRhzc8AkGfg6V0jtK8PlG8/eyyc2xhYsR961FDDx1Tx6nyE0K7lS+A==}
-    engines: {node: '>=18.17.0', pnpm: '>=8'}
-    peerDependencies:
-      typescript: '>=4.7'
 
   '@qdrant/js-client-rest@1.20.0':
     resolution: {integrity: sha512-NhvW4z3rbxYc1e+ksHci5hE8vNBpbi5YoB7z3dzaVcskM2el7O/exNg5fclAN+G5MXn/TRx2Rcie8YTXo2YQdg==}
@@ -3344,10 +3335,6 @@ packages:
     resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
     engines: {node: '>=8'}
 
-  ansi-styles@5.2.0:
-    resolution: {integrity: sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==}
-    engines: {node: '>=10'}
-
   ansi-styles@6.2.3:
     resolution: {integrity: sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==}
     engines: {node: '>=12'}
@@ -3718,10 +3705,6 @@ packages:
     peerDependenciesMeta:
       supports-color:
         optional: true
-
-  decamelize@1.2.0:
-    resolution: {integrity: sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==}
-    engines: {node: '>=0.10.0'}
 
   dedent@1.7.2:
     resolution: {integrity: sha512-WzMx3mW98SN+zn3hgemf4OzdmyNhhhKz5Ay0pUfQiMQ3e1g+xmTJWp/pKdwKVXhdSkAEGIIzqeuWrL3mV/AXbA==}
@@ -6397,10 +6380,6 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
-  undici@6.23.0:
-    resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
-    engines: {node: '>=18.17'}
-
   undici@7.29.1:
     resolution: {integrity: sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==}
     engines: {node: '>=20.18.1'}
@@ -6875,14 +6854,14 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@browserbasehq/stagehand@1.14.0(@playwright/test@1.58.2)(bufferutil@4.1.0)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(zod@4.3.6)':
+  '@browserbasehq/stagehand@1.14.0(@playwright/test@1.58.2)(bufferutil@4.1.0)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(zod@4.3.6)':
     dependencies:
       '@anthropic-ai/sdk': 0.27.3
       '@browserbasehq/sdk': 2.6.0
       '@playwright/test': 1.58.2
       deepmerge: 4.3.1
       dotenv: 17.2.3
-      openai: 7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
+      openai: 7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
       ws: 8.18.3(bufferutil@4.1.0)
       zod: 4.3.6
       zod-to-json-schema: 3.25.1(zod@4.3.6)
@@ -6890,8 +6869,6 @@ snapshots:
       - bufferutil
       - encoding
       - utf-8-validate
-
-  '@cfworker/json-schema@4.1.1': {}
 
   '@cfworker/json-schema@4.1.6': {}
 
@@ -7515,11 +7492,11 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@langchain/classic@1.0.20(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))':
+  '@langchain/classic@1.0.20(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))':
     dependencies:
-      '@langchain/core': 1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
-      '@langchain/openai': 1.2.10(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(ws@8.18.3(bufferutil@4.1.0))
-      '@langchain/textsplitters': 1.0.1(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))
+      '@langchain/core': 1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/openai': 1.2.10(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/textsplitters': 1.0.1(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
       handlebars: 4.7.8
       js-yaml: 4.1.1
       jsonpointer: 5.0.1
@@ -7528,7 +7505,7 @@ snapshots:
       yaml: 2.8.2
       zod: 4.3.6
     optionalDependencies:
-      langsmith: 0.5.6(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
+      langsmith: 0.5.6(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
     transitivePeerDependencies:
       - '@opentelemetry/api'
       - '@opentelemetry/exporter-trace-otlp-proto'
@@ -7536,19 +7513,19 @@ snapshots:
       - openai
       - ws
 
-  '@langchain/community@1.1.19(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.58.2)(bufferutil@4.1.0)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(zod@4.3.6))(@ibm-cloud/watsonx-ai@1.7.8)(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(@neondatabase/serverless@0.9.5)(@vercel/postgres@0.10.0)(google-auth-library@10.6.1)(ibm-cloud-sdk-core@5.4.7)(ignore@7.0.5)(ioredis@5.9.2)(jsonwebtoken@9.0.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(pdf-parse@2.4.5)(pg@8.16.3)(playwright@1.58.2)(ws@8.18.3(bufferutil@4.1.0))':
+  '@langchain/community@1.1.19(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.58.2)(bufferutil@4.1.0)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(zod@4.3.6))(@ibm-cloud/watsonx-ai@1.7.8)(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(@neondatabase/serverless@0.9.5)(@vercel/postgres@0.10.0)(google-auth-library@10.6.1)(ibm-cloud-sdk-core@5.4.7)(ignore@7.0.5)(ioredis@5.9.2)(jsonwebtoken@9.0.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(pdf-parse@2.4.5)(pg@8.16.3)(playwright@1.58.2)(ws@8.18.3(bufferutil@4.1.0))':
     dependencies:
-      '@browserbasehq/stagehand': 1.14.0(@playwright/test@1.58.2)(bufferutil@4.1.0)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(zod@4.3.6)
+      '@browserbasehq/stagehand': 1.14.0(@playwright/test@1.58.2)(bufferutil@4.1.0)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(zod@4.3.6)
       '@ibm-cloud/watsonx-ai': 1.7.8
-      '@langchain/classic': 1.0.20(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
-      '@langchain/core': 1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
-      '@langchain/openai': 1.2.10(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/classic': 1.0.20(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/core': 1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/openai': 1.2.10(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(ws@8.18.3(bufferutil@4.1.0))
       binary-extensions: 2.3.0
       flat: 5.0.2
       ibm-cloud-sdk-core: 5.4.7
       js-yaml: 4.1.1
       math-expression-evaluator: 2.0.7
-      openai: 7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
+      openai: 7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
       uuid: 10.0.0
       zod: 4.3.6
     optionalDependencies:
@@ -7569,30 +7546,12 @@ snapshots:
       - '@opentelemetry/sdk-trace-base'
       - peggy
 
-  '@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))':
-    dependencies:
-      '@cfworker/json-schema': 4.1.1
-      ansi-styles: 5.2.0
-      camelcase: 6.3.0
-      decamelize: 1.2.0
-      js-tiktoken: 1.0.21
-      langsmith: 0.5.6(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
-      mustache: 4.2.0
-      p-queue: 6.6.2
-      uuid: 10.0.0
-      zod: 4.3.6
-    transitivePeerDependencies:
-      - '@opentelemetry/api'
-      - '@opentelemetry/exporter-trace-otlp-proto'
-      - '@opentelemetry/sdk-trace-base'
-      - openai
-
-  '@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))':
+  '@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))':
     dependencies:
       '@cfworker/json-schema': 4.1.6
       '@standard-schema/spec': 1.1.0
       js-tiktoken: 1.0.21
-      langsmith: 0.11.8(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      langsmith: 0.11.8(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       mustache: 4.2.0
       p-queue: 6.6.2
       zod: 4.3.6
@@ -7603,10 +7562,26 @@ snapshots:
       - openai
       - ws
 
-  '@langchain/deepseek@1.1.21(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))':
+  '@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))':
     dependencies:
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
-      '@langchain/openai': 1.8.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))
+      '@cfworker/json-schema': 4.1.6
+      '@standard-schema/spec': 1.1.0
+      js-tiktoken: 1.0.21
+      langsmith: 0.11.8(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      mustache: 4.2.0
+      p-queue: 6.6.2
+      zod: 4.3.6
+    transitivePeerDependencies:
+      - '@opentelemetry/api'
+      - '@opentelemetry/exporter-trace-otlp-proto'
+      - '@opentelemetry/sdk-trace-base'
+      - openai
+      - ws
+
+  '@langchain/deepseek@1.1.21(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))':
+    dependencies:
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/openai': 1.8.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))
     transitivePeerDependencies:
       - '@aws-sdk/credential-provider-node'
       - '@smithy/hash-node'
@@ -7615,25 +7590,25 @@ snapshots:
       - undici
       - ws
 
-  '@langchain/google-genai@2.1.20(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))':
+  '@langchain/google-genai@2.1.20(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))':
     dependencies:
       '@google/generative-ai': 0.24.1
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       uuid: 11.1.0
 
-  '@langchain/langgraph-checkpoint-redis@1.1.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(@langchain/langgraph-checkpoint@1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))))':
+  '@langchain/langgraph-checkpoint-redis@1.1.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(@langchain/langgraph-checkpoint@1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))))':
     dependencies:
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
-      '@langchain/langgraph-checkpoint': 1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/langgraph-checkpoint': 1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
       redis: 4.7.1
 
-  '@langchain/langgraph-checkpoint@1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))':
+  '@langchain/langgraph-checkpoint@1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))':
     dependencies:
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
 
-  '@langchain/langgraph-sdk@1.13.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@langchain/langgraph-sdk@1.13.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       '@langchain/protocol': 0.0.20
       '@types/json-schema': 7.0.15
       p-queue: 9.3.5
@@ -7642,11 +7617,11 @@ snapshots:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
-  '@langchain/langgraph@1.7.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.3.6)':
+  '@langchain/langgraph@1.7.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.3.6)':
     dependencies:
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
-      '@langchain/langgraph-checkpoint': 1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
-      '@langchain/langgraph-sdk': 1.13.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/langgraph-checkpoint': 1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
+      '@langchain/langgraph-sdk': 1.13.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@langchain/protocol': 0.0.20
       '@standard-schema/spec': 1.1.0
       zod: 4.3.6
@@ -7654,20 +7629,20 @@ snapshots:
       - react
       - react-dom
 
-  '@langchain/openai@1.2.10(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(ws@8.18.3(bufferutil@4.1.0))':
+  '@langchain/openai@1.2.10(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(ws@8.18.3(bufferutil@4.1.0))':
     dependencies:
-      '@langchain/core': 1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
+      '@langchain/core': 1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       js-tiktoken: 1.0.21
       openai: 6.25.0(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
       zod: 4.3.6
     transitivePeerDependencies:
       - ws
 
-  '@langchain/openai@1.8.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))':
+  '@langchain/openai@1.8.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))':
     dependencies:
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       js-tiktoken: 1.0.21
-      openai: 7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
+      openai: 7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
       zod: 4.3.6
     transitivePeerDependencies:
       - '@aws-sdk/credential-provider-node'
@@ -7679,25 +7654,23 @@ snapshots:
 
   '@langchain/protocol@0.0.20': {}
 
-  '@langchain/qdrant@1.0.1(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))(typescript@5.9.3)':
+  '@langchain/qdrant@1.0.3(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(typescript@5.9.3)':
     dependencies:
-      '@langchain/core': 1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
-      '@qdrant/js-client-rest': 1.17.0(typescript@5.9.3)
-      uuid: 10.0.0
+      '@langchain/core': 1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@qdrant/js-client-rest': 1.20.0(typescript@5.9.3)
     transitivePeerDependencies:
       - typescript
 
-  '@langchain/qdrant@1.0.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(typescript@5.9.3)':
+  '@langchain/qdrant@1.0.3(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(typescript@5.9.3)':
     dependencies:
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
-      '@qdrant/js-client-rest': 1.17.0(typescript@5.9.3)
-      uuid: 10.0.0
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@qdrant/js-client-rest': 1.20.0(typescript@5.9.3)
     transitivePeerDependencies:
       - typescript
 
-  '@langchain/textsplitters@1.0.1(@langchain/core@1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)))':
+  '@langchain/textsplitters@1.0.1(@langchain/core@1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))':
     dependencies:
-      '@langchain/core': 1.1.28(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))
+      '@langchain/core': 1.3.4(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       js-tiktoken: 1.0.21
 
   '@modelcontextprotocol/sdk@1.27.1(@cfworker/json-schema@4.1.6)(zod@3.25.76)':
@@ -7925,12 +7898,6 @@ snapshots:
   '@protobufjs/pool@1.1.0': {}
 
   '@protobufjs/utf8@1.1.0': {}
-
-  '@qdrant/js-client-rest@1.17.0(typescript@5.9.3)':
-    dependencies:
-      '@qdrant/openapi-typescript-fetch': 1.2.6
-      typescript: 5.9.3
-      undici: 6.23.0
 
   '@qdrant/js-client-rest@1.20.0(typescript@5.9.3)':
     dependencies:
@@ -8981,7 +8948,8 @@ snapshots:
 
   '@types/tough-cookie@4.0.5': {}
 
-  '@types/uuid@10.0.0': {}
+  '@types/uuid@10.0.0':
+    optional: true
 
   '@types/uuid@8.3.4': {}
 
@@ -9277,8 +9245,6 @@ snapshots:
   ansi-styles@4.3.0:
     dependencies:
       color-convert: 2.0.1
-
-  ansi-styles@5.2.0: {}
 
   ansi-styles@6.2.3: {}
 
@@ -9587,6 +9553,7 @@ snapshots:
   console-table-printer@2.15.0:
     dependencies:
       simple-wcswidth: 1.1.2
+    optional: true
 
   content-disposition@1.0.1: {}
 
@@ -9665,8 +9632,6 @@ snapshots:
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
-
-  decamelize@1.2.0: {}
 
   dedent@1.7.2: {}
 
@@ -11005,12 +10970,12 @@ snapshots:
 
   kleur@4.1.5: {}
 
-  langchain@1.6.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(ws@8.18.3(bufferutil@4.1.0)):
+  langchain@1.6.1(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(ws@8.18.3(bufferutil@4.1.0)):
     dependencies:
-      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
-      '@langchain/langgraph': 1.7.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.3.6)
-      '@langchain/langgraph-checkpoint': 1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
-      langsmith: 0.11.8(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/core': 1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
+      '@langchain/langgraph': 1.7.0(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.3.6)
+      '@langchain/langgraph-checkpoint': 1.2.2(@langchain/core@1.3.5(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)))
+      langsmith: 0.11.8(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0))
       zod: 4.3.6
     transitivePeerDependencies:
       - '@opentelemetry/api'
@@ -11021,14 +10986,14 @@ snapshots:
       - react-dom
       - ws
 
-  langsmith@0.11.8(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)):
+  langsmith@0.11.8(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6))(ws@8.18.3(bufferutil@4.1.0)):
     dependencies:
       p-queue: 6.6.2
     optionalDependencies:
-      openai: 7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
+      openai: 7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
       ws: 8.18.3(bufferutil@4.1.0)
 
-  langsmith@0.5.6(openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)):
+  langsmith@0.5.6(openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)):
     dependencies:
       '@types/uuid': 10.0.0
       chalk: 5.6.2
@@ -11037,7 +11002,8 @@ snapshots:
       semver: 7.7.4
       uuid: 10.0.0
     optionalDependencies:
-      openai: 7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
+      openai: 7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6)
+    optional: true
 
   language-subtag-registry@0.3.23: {}
 
@@ -11449,10 +11415,10 @@ snapshots:
       ws: 8.18.3(bufferutil@4.1.0)
       zod: 4.3.6
 
-  openai@7.51.0(google-auth-library@10.6.1)(undici@6.23.0)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6):
+  openai@7.51.0(google-auth-library@10.6.1)(undici@7.29.1)(ws@8.18.3(bufferutil@4.1.0))(zod@4.3.6):
     optionalDependencies:
       google-auth-library: 10.6.1
-      undici: 6.23.0
+      undici: 7.29.1
       ws: 8.18.3(bufferutil@4.1.0)
       zod: 4.3.6
 
@@ -12210,7 +12176,8 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
-  simple-wcswidth@1.1.2: {}
+  simple-wcswidth@1.1.2:
+    optional: true
 
   sisteransi@1.0.5: {}
 
@@ -12649,8 +12616,6 @@ snapshots:
   undici-types@5.26.5: {}
 
   undici-types@6.21.0: {}
-
-  undici@6.23.0: {}
 
   undici@7.29.1: {}
 

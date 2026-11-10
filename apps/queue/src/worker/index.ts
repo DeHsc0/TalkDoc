@@ -7,8 +7,6 @@ import { CharacterTextSplitter } from "@langchain/textsplitters"
 import { QdrantVectorStore } from "@langchain/qdrant"
 import { db } from "@repo/database"
 import { docs , chats } from "@repo/database/schema"
-import { unlink } from "fs"
-import { ingestPastResQueue } from ".."
 import { uploadFile } from "../helper"
 
 const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
