@@ -1,0 +1,8 @@
+services:
+  app:
+    image: harshalso9/talkdoc:latest
+    env_file:
+      - .env.production
+    ports:
+      - "127.0.0.1:3003:3000"
+      - "127.0.0.1:3004:3001"

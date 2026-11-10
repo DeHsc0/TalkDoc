@@ -10,6 +10,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "build": "tsc -b",
+    "start" : "pnpm run build && pnpm run db:generate",
     "db:push": "drizzle-kit push"
   },
   "keywords": [],

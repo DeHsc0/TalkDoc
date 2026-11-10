@@ -6,6 +6,7 @@
   "scripts": {
     "dev:worker": "pnpm run build && tsx watch src/worker/index.ts",
     "start:worker": "node dist/worker/index.js",
+    "start" : "pnpm run build && pnpm run start:worker",
     "build": "tsc -b",
     "dev": " pnpm run dev:worker && node dist "
   },

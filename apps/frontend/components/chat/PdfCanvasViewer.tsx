@@ -305,9 +305,22 @@ export default function PdfCanvasViewer({
     [pageCount]
   )
 
-  /** Clears the previous citation highlight. */
+  /**
+   * Clears the previous citation highlight: removes span classes and unwraps
+   * any <mark> elements created for partial (sub-span) highlights.
+   */
   const clearHighlight = useCallback(() => {
-    highlightRef.current.forEach((element) => element.classList.remove("citation-highlight"))
+    highlightRef.current.forEach((element) => {
+      if (element.tagName === "MARK") {
+        const parent = element.parentNode
+        if (parent) {
+          element.replaceWith(...element.childNodes)
+          parent.normalize()
+        }
+      } else {
+        element.classList.remove("citation-highlight")
+      }
+    })
     highlightRef.current = []
   }, [])
 
@@ -348,13 +361,36 @@ export default function PdfCanvasViewer({
           .replace(/\s+/g, "")
           .replace(/[\u00AD-]/g, "")
           .toLowerCase()
-      const target = compact(highlight.content).slice(0, 140)
+      const target = compact(highlight.content).slice(0, 800)
+
+      // Per-span compact text plus a compact-index -> raw-index map, so
+      // partially covered spans can be highlighted at character precision.
       let combined = ""
-      const spanRanges: { element: HTMLElement; start: number; end: number }[] = []
+      const spanRanges: {
+        element: HTMLElement
+        start: number
+        end: number
+        compactText: string
+        rawMap: number[]
+      }[] = []
       for (const span of spans) {
-        const text = compact(span.textContent ?? "")
-        spanRanges.push({ element: span, start: combined.length, end: combined.length + text.length })
-        combined += text
+        const raw = span.textContent ?? ""
+        let compactText = ""
+        const rawMap: number[] = []
+        for (let i = 0; i < raw.length; i++) {
+          const char = raw.charAt(i)
+          if (/\s|[\u00AD-]/.test(char)) continue
+          compactText += char.toLowerCase()
+          rawMap.push(i)
+        }
+        spanRanges.push({
+          element: span,
+          start: combined.length,
+          end: combined.length + compactText.length,
+          compactText,
+          rawMap,
+        })
+        combined += compactText
       }
 
       let matchStart = combined.indexOf(target)
@@ -367,17 +403,46 @@ export default function PdfCanvasViewer({
         return
       }
       const matchEnd = matchStart + target.length
-      // Highlight spans fully inside the match, plus edge spans whose
-      // majority lies within it. Whole-span coloring is the finest available
-      // granularity, so "any overlap" would bleed the highlight into
-      // neighboring lines.
-      const hits = spanRanges.filter((range) => {
-        if (range.start >= matchStart && range.end <= matchEnd) return true
-        const overlap = Math.min(range.end, matchEnd) - Math.max(range.start, matchStart)
-        return overlap > 0 && overlap / (range.end - range.start) >= 0.5
-      })
-      hits.forEach((range) => range.element.classList.add("citation-highlight"))
-      highlightRef.current = hits.map((range) => range.element)
+
+      for (const range of spanRanges) {
+        if (range.end <= matchStart || range.start >= matchEnd) continue
+        const element = range.element
+        if (range.start >= matchStart && range.end <= matchEnd) {
+          // Fully covered span: color the whole element.
+          element.classList.add("citation-highlight")
+          highlightRef.current.push(element)
+          continue
+        }
+        // Partially covered span: wrap exactly the cited characters in a
+        // <mark> so the highlight starts/ends mid-line like a real selection.
+        const localStart = Math.max(matchStart, range.start) - range.start
+        const localEnd = Math.min(matchEnd, range.end) - range.start
+        const rawStart = range.rawMap[localStart]
+        const rawEnd = (range.rawMap[localEnd - 1] ?? -1) + 1
+        if (rawStart === undefined || rawEnd <= rawStart) {
+          element.classList.add("citation-highlight")
+          highlightRef.current.push(element)
+          continue
+        }
+        const raw = element.textContent ?? ""
+        const mark = document.createElement("mark")
+        mark.className = "citation-highlight"
+        mark.textContent = raw.slice(rawStart, rawEnd)
+        element.textContent = ""
+        if (rawStart > 0) element.append(raw.slice(0, rawStart))
+        element.append(mark)
+        if (rawEnd < raw.length) element.append(raw.slice(rawEnd))
+        highlightRef.current.push(mark)
+      }
+
+      // Bring the first highlighted element into view: the cited passage
+      // often sits mid-page (below figures), so page-top navigation alone
+      // misses it.
+      const first = highlightRef.current[0]
+      if (first?.isConnected) {
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        first.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" })
+      }
     }
 
     attempt()

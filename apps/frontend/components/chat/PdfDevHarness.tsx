@@ -50,8 +50,9 @@ export default function PdfDevHarness() {
             className="rounded border border-border px-2 py-1 font-space text-[10px] text-muted-foreground uppercase hover:text-ivory"
             onClick={() =>
               setHighlight({
-                pageNumber: 1,
-                content: "Large language models (LLMs) have revolutionized AI, but are constrained by a limited context window.",
+                pageNumber: 3,
+                content:
+                  "the queue to reinsert them into the LLM’s context window. The queue manager is also responsible for controlling con-text overflow via a queue eviction policy. When the prompt tokens exceed the ‘warning token count‘ of the underly-ing LLM’s context window (e.g. 70% of the context win-dow), the queue manager inserts a system message into the queue warning the LLM of an impending queue eviction (a ‘memory pressure‘ warning) to allow the LLM to use MemGPT functions to store important information con-tained in the FIFO queue to working context or archival storage",
                 nonce: Date.now(),
               })
             }
