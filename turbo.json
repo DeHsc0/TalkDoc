@@ -2,7 +2,7 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "stream",
   "globalEnv" : [
-    "PORT",
+    "BACKEND_PORT",
     "NEXT_PUBLIC_API_URL",
     "BUCKETNAME",
     "REGION",
