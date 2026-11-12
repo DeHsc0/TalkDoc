@@ -45,6 +45,15 @@ function greeting(date = new Date()): string {
   return "Good evening"
 }
 
+function subscribeToGreeting(onChange: () => void) {
+  window.addEventListener("focus", onChange)
+  return () => window.removeEventListener("focus", onChange)
+}
+
+function getServerGreeting(): string {
+  return "Good morning"
+}
+
 export default function Dashboard() {
   const { getDocs } = useDocApi()
   const { user } = useUser()
@@ -56,6 +65,14 @@ export default function Dashboard() {
 
   const [search, setSearch] = useState("")
   const [sort, setSort] = useState<SortOrder>("newest")
+
+  // useSyncExternalStore uses the fixed server snapshot during hydration, then
+  // reads the browser's local time after hydration completes.
+  const currentGreeting = useSyncExternalStore(
+    subscribeToGreeting,
+    greeting,
+    getServerGreeting
+  )
 
   // The layout preference lives in localStorage (an external store), read
   // through useSyncExternalStore so server and client render consistently.
@@ -172,7 +189,7 @@ export default function Dashboard() {
           {/* Header */}
           <header className="mb-8">
             <p className="font-space text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-              {greeting()}
+              {currentGreeting}
               {firstName ? `, ${firstName}` : ""}
             </p>
             <h1 className="mt-2 text-3xl font-medium tracking-tight text-ivory">Your documents</h1>
