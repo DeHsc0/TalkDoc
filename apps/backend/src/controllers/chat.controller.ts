@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { aiResSchema, chatSchema } from "../types/zod"
+import { chatSchema } from "../types/zod"
 import { chats, docs, conversations } from "@repo/database/schema"
 import { and, desc, eq } from "drizzle-orm"
 import { db } from "@repo/database"
@@ -8,7 +8,6 @@ import { getConnection } from "@repo/config"
 import {  getAgent , model } from "../config/ai"
 import { getAuth } from "@clerk/express"
 import { SystemMessage , HumanMessage } from "langchain"
-import { RedisSaver } from "@langchain/langgraph-checkpoint-redis"
 
 async function chatDoc ( req : Request , res : Response ) {
 
@@ -147,7 +146,7 @@ async function chatDoc ( req : Request , res : Response ) {
             .orderBy(desc(chats.createdAt))
             .limit(10)
     
-            const setCache = await connection.set( `${userId}:${conversationId}` , JSON.stringify({
+            await connection.set( `${userId}:${conversationId}` , JSON.stringify({
     
                 docId : doc[0].id ,
                 pastResponses

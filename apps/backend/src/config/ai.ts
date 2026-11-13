@@ -1,4 +1,3 @@
-import { GoogleGenAI } from "@google/genai";
 import z from "zod";
 import {createAgent , toolStrategy} from "langchain"
 import { embeddings, qdrantClient } from "@repo/config"

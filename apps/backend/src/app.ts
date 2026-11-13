@@ -14,6 +14,4 @@ app.use("/api" , apiRouter )
 
 app.listen( process.env.BACKEND_PORT || 3001 , async () => {
 
-    console.log(`Server is running on ${process.env.PORT}`)
-
 })

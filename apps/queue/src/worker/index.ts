@@ -9,7 +9,7 @@ import { db } from "@repo/database"
 import { docs , chats } from "@repo/database/schema"
 import { uploadFile } from "../helper"
 
-const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
+export const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
 
     const fileBuffer = Buffer.from(job.data.fileBase64 , "base64")
 
@@ -59,7 +59,7 @@ const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
             collectionName: "docs",
             client : qdrantClient
         })
-        const vecData = await vectorStore.addDocuments(docsWithMeta)
+        await vectorStore.addDocuments(docsWithMeta)
 
         return { success : true , data : response[0] }
 
@@ -71,11 +71,11 @@ const fileWorker = new Worker<FileJobData>("file-processing", async (job) => {
 
 }, { connection : getConnection() })
 
-const ingestPastResWorker = new Worker<IngestPastResData>("ingest-past-res", async (job) => {
+export const ingestPastResWorker = new Worker<IngestPastResData>("ingest-past-res", async (job) => {
     
     try {
         
-        const insertChats = await db.insert(chats).values({
+        await db.insert(chats).values({
             
             usersResponse : job.data.searchQuery,
             conversationId : job.data.conversationId,

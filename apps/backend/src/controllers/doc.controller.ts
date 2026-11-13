@@ -1,9 +1,8 @@
 import { fileQueue, fileQueueEvents }  from "@repo/queue"
 import { Request, Response } from "express";
 import { docCreationSchema } from "../types/zod";
-import path, { parse } from "path"
 import { db } from "@repo/database";
-import {  docs , chats, conversations } from "@repo/database/schema";
+import { docs } from "@repo/database/schema";
 import {  and , eq } from "drizzle-orm";
 import { getAuth } from "@clerk/express";
 import { qdrantClient } from "@repo/config";
@@ -164,7 +163,7 @@ async function deleteDoc ( req : Request , res : Response) {
 
     try{
 
-        const vector = await qdrantClient.delete( "docs" , {
+        await qdrantClient.delete( "docs" , {
 
          filter : {
 

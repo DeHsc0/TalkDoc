@@ -139,15 +139,24 @@ export default function PdfCanvasViewer({
     [pageSizes]
   )
 
+  /** CSS width of a main-view page at the current zoom (fit-width base). */
+  const mainPageWidth = useCallback(
+    () => Math.max(240, fitWidth ?? 600) * zoom,
+    [fitWidth, zoom]
+  )
+
   /** Renders a main-view page at the current zoom (fit-width base). */
   const renderMainPage = useCallback(
     (pageNumber: number) => {
       const container = pageRefs.current.get(pageNumber)
       if (!container) return
-      const fitWidth = (scrollRef.current?.clientWidth ?? 600) - 32
-      void rasterize(pageNumber, container, Math.max(240, fitWidth * zoom), `main-${pageNumber}`)
+      const cssWidth = mainPageWidth()
+      // Records the scale this page is being rendered at, so the citation
+      // highlighter can wait until the text layer matches the current zoom.
+      container.dataset.renderedWidth = String(Math.round(cssWidth))
+      void rasterize(pageNumber, container, cssWidth, `main-${pageNumber}`)
     },
-    [rasterize, zoom]
+    [mainPageWidth, rasterize]
   )
 
   /** Renders a thumbnail at a fixed small width. */
@@ -226,12 +235,17 @@ export default function PdfCanvasViewer({
   }, [blobUrl])
 
   // Track the page column width so zoom math never touches refs in render.
+  // A ResizeObserver (not window.resize) is required: the panel resizes when
+  // the chat sidebar toggles or the split handle drags, without any window
+  // resize event.
   useEffect(() => {
-    const measure = () => setFitWidth((scrollRef.current?.clientWidth ?? 600) - 32)
+    const element = scrollRef.current
+    if (!element) return
+    const measure = () => setFitWidth(element.clientWidth - 32)
     measure()
-    const onResize = () => measure()
-    window.addEventListener("resize", onResize)
-    return () => window.removeEventListener("resize", onResize)
+    const observer = new ResizeObserver(measure)
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [phase, showThumbs])
 
   // Lazy render + current-page tracking for the main view.
@@ -276,21 +290,28 @@ export default function PdfCanvasViewer({
     return () => observer.disconnect()
   }, [phase, showThumbs, pageCount, renderThumbPage])
 
-  // Re-render the main view when zoom changes (canvas keys are per-page so
-  // cancelling and re-rendering in place is safe).
+  // Re-render the main view when zoom or panel width changes (canvas keys are
+  // per-page so cancelling and re-rendering in place is safe). Pages near the
+  // viewport re-render immediately; distant ones are marked unrendered so the
+  // IntersectionObserver rasterizes them at the new scale when they scroll
+  // back into view. Without this, off-screen pages keep canvases and text
+  // layers laid out for the old scale, and citation highlights land in the
+  // wrong place.
   useEffect(() => {
     if (phase !== "ready" || pageCount === 0) return
-    renderedMainRef.current.clear()
-    const visible = new Set<number>()
     pageRefs.current.forEach((element, pageNumber) => {
+      if (!renderedMainRef.current.has(pageNumber)) return
       const rect = element.getBoundingClientRect()
-      if (rect.bottom > 0 && rect.top < window.innerHeight) visible.add(pageNumber)
+      const nearViewport = rect.bottom > -300 && rect.top < window.innerHeight + 300
+      if (nearViewport) {
+        renderMainPage(pageNumber)
+      } else {
+        // Beyond the observer's 400px rootMargin, so it counts as
+        // non-intersecting and will re-fire when scrolled near again.
+        renderedMainRef.current.delete(pageNumber)
+      }
     })
-    visible.forEach((pageNumber) => {
-      renderedMainRef.current.add(pageNumber)
-      renderMainPage(pageNumber)
-    })
-  }, [zoom, phase, pageCount, renderMainPage])
+  }, [zoom, fitWidth, phase, pageCount, renderMainPage])
 
   const goToPage = useCallback(
     (page: number) => {
@@ -342,8 +363,12 @@ export default function PdfCanvasViewer({
       attempts++
       const container = pageRefs.current.get(highlight.pageNumber)
       const textLayer = container?.querySelector(":scope > .textLayer")
-      if (!textLayer) {
-        if (attempts < 12) timer = setTimeout(attempt, 120)
+      // Wait until the page's text layer was rendered at the current zoom:
+      // matching spans of a stale-scale layer puts the highlight in the
+      // wrong place (e.g. right after zooming or resizing the panel).
+      const expectedWidth = String(Math.round(mainPageWidth()))
+      if (!container || !textLayer || container.dataset.renderedWidth !== expectedWidth) {
+        if (attempts < 30) timer = setTimeout(attempt, 120)
         return
       }
       const spans = [...textLayer.querySelectorAll("span")]
@@ -460,7 +485,7 @@ export default function PdfCanvasViewer({
       document.removeEventListener("selectionchange", onSelectionChange)
       clearHighlight()
     }
-  }, [highlight, phase, pageCount, clearHighlight, goToPage])
+  }, [highlight, phase, pageCount, clearHighlight, goToPage, mainPageWidth])
 
   const setZoomClamped = useCallback((next: number) => {
     setZoom(Math.min(4, Math.max(0.25, Number(next.toFixed(2)))))
@@ -507,7 +532,7 @@ export default function PdfCanvasViewer({
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       {/* Toolbar */}
       <div
         className="flex flex-wrap items-center gap-2 border-b border-border px-3 py-2"
@@ -634,7 +659,7 @@ export default function PdfCanvasViewer({
       </div>
 
       {/* Body: thumbnails + pages */}
-      <div className="flex min-h-0 flex-1">
+      <div className="flex min-h-0 min-w-0 flex-1">
         {showThumbs ? (
           <nav
             aria-label="Page thumbnails"
@@ -700,11 +725,11 @@ export default function PdfCanvasViewer({
               </p>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-5">
+            <div className="flex flex-col gap-5">
               {Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => {
                 const size = pageSizes.get(page)
                 const ratio = size ? size.height / size.width : 1.414
-                const width = Math.max(240, (fitWidth ?? 600) - 32) * zoom
+                const width = mainPageWidth()
                 return (
                   <div
                     key={page}
@@ -713,10 +738,10 @@ export default function PdfCanvasViewer({
                       if (element) pageRefs.current.set(page, element)
                       else pageRefs.current.delete(page)
                     }}
-                    className={`relative w-full shrink-0 overflow-hidden rounded-sm bg-white shadow-lg shadow-black/40 ${
+                    className={`relative mx-auto shrink-0 overflow-hidden rounded-sm bg-white shadow-lg shadow-black/40 ${
                       page === currentPage ? "ring-1 ring-amber-signal/40" : ""
                     }`}
-                    style={{ maxWidth: `${width}px`, aspectRatio: `1 / ${ratio}` }}
+                    style={{ width: `${width}px`, aspectRatio: `1 / ${ratio}` }}
                     aria-label={`Page ${page}`}
                   >
                     <canvas className="block h-auto w-full" aria-hidden="true" />

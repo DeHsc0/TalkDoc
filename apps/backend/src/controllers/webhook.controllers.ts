@@ -71,7 +71,7 @@ export async function webHookController( req : Request , res : Response) {
                 error : "Please provide an email address"
             })
 
-            const response = await db.insert(users).values({
+            await db.insert(users).values({
 
                 userName : username,
                 email : email_addresses[0].email_address,
