@@ -1,4 +1,4 @@
-name: Build, Push to Docker Hub and Deploy QueryAI
+name: Build, Push to Docker Hub and Deploy TalkDoc
 
 on:
   push:
